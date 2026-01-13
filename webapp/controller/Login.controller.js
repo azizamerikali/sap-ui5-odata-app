@@ -103,12 +103,7 @@ sap.ui.define([
                 clearTimeout(timeoutId);
                 sap.ui.core.BusyIndicator.hide();
 
-                var sErrorMsg = that.getResourceBundle().getText("loginErrorFailed");
-
-                if (oError && oError.message) {
-                    sErrorMsg = oError.message;
-                }
-
+                var sErrorMsg = that._getErrorMessage(oError);
                 oModel.setProperty("/errorMessage", sErrorMsg);
             });
 
@@ -118,14 +113,85 @@ sap.ui.define([
                 sap.ui.core.BusyIndicator.hide();
 
                 var oResponse = oEvent.getParameter("response");
-                var sErrorMsg = that.getResourceBundle().getText("loginErrorFailed");
-
-                if (oResponse && oResponse.statusCode === 401) {
-                    sErrorMsg = that.getResourceBundle().getText("loginErrorUnauthorized");
-                }
-
+                var sErrorMsg = that._parseResponseError(oResponse);
                 oModel.setProperty("/errorMessage", sErrorMsg);
             });
+        },
+
+        _getErrorMessage: function (oError) {
+            // Check if it's a network/connection error
+            if (!oError) {
+                return this.getResourceBundle().getText("loginErrorFailed");
+            }
+
+            // Check for status code in error
+            if (oError.statusCode === 401 || (oError.message && oError.message.includes("401"))) {
+                return this.getResourceBundle().getText("loginErrorUnauthorized");
+            }
+
+            // Check for network errors
+            if (oError.message && (oError.message.includes("Failed to fetch") ||
+                oError.message.includes("NetworkError") ||
+                oError.message.includes("CORS"))) {
+                return this.getResourceBundle().getText("loginErrorNetwork");
+            }
+
+            // Return the actual error message for debugging
+            if (oError.message) {
+                return oError.message;
+            }
+
+            return this.getResourceBundle().getText("loginErrorFailed");
+        },
+
+        _parseResponseError: function (oResponse) {
+            if (!oResponse) {
+                return this.getResourceBundle().getText("loginErrorFailed");
+            }
+
+            var statusCode = oResponse.statusCode;
+
+            // 401 Unauthorized - wrong username/password
+            if (statusCode === 401) {
+                return this.getResourceBundle().getText("loginErrorUnauthorized");
+            }
+
+            // 403 Forbidden - no permission
+            if (statusCode === 403) {
+                return this.getResourceBundle().getText("loginErrorForbidden");
+            }
+
+            // 404 Not Found - service not found
+            if (statusCode === 404) {
+                return this.getResourceBundle().getText("loginErrorNotFound");
+            }
+
+            // 500+ Server errors
+            if (statusCode >= 500) {
+                return this.getResourceBundle().getText("loginErrorServer");
+            }
+
+            // Try to parse SAP error message from response body
+            if (oResponse.responseText) {
+                try {
+                    var oErrorBody = JSON.parse(oResponse.responseText);
+                    if (oErrorBody.error && oErrorBody.error.message && oErrorBody.error.message.value) {
+                        return oErrorBody.error.message.value;
+                    }
+                } catch (e) {
+                    // Not JSON, check for HTML error
+                    if (oResponse.responseText.includes("401") || oResponse.responseText.includes("Unauthorized")) {
+                        return this.getResourceBundle().getText("loginErrorUnauthorized");
+                    }
+                }
+            }
+
+            // Default error with status code
+            if (statusCode) {
+                return this.getResourceBundle().getText("loginErrorWithCode", [statusCode]);
+            }
+
+            return this.getResourceBundle().getText("loginErrorFailed");
         },
 
         getRouter: function () {
