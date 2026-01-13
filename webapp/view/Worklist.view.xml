@@ -72,13 +72,13 @@
 						<Text text="{i18n>tableProjectColumnTitle}" id="projectColumnTitle"/>
 					</Column>
 					<Column id="customerColumn" width="15%">
-						<Text text="Müşteri" id="customerColumnTitle"/>
+						<Text text="{i18n>tableCustomerColumnTitle}" id="customerColumnTitle"/>
 					</Column>
                     <Column id="dateColumn" width="15%">
 						<Text text="{i18n>tableDateColumnTitle}" id="dateColumnTitle"/>
 					</Column>
 					<Column id="locationColumn" width="10%">
-						<Text text="Lokasyon" id="locationColumnTitle"/>
+						<Text text="{i18n>tableLocationColumnTitle}" id="locationColumnTitle"/>
 					</Column>
 					<Column id="durationColumn" hAlign="End" width="10%">
 						<Text text="{i18n>tableDurationColumnTitle}" id="durationColumnTitle"/>
@@ -112,7 +112,7 @@
 								state="{= ${LokasyonType} === 'O' ? 'Success' : (${LokasyonType} === 'U' ? 'Warning' : 'Information') }" />
 							<ObjectNumber
 								number="{Sure}"
-								unit="Saat"
+								unit="{i18n>unitHour}"
 								state="Success" />
 						</cells>
 					</ColumnListItem>
