@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Destination Test</title>
+    <script src="https://sapui5.hana.ondemand.com/resources/sap-ui-core.js" id="sap-ui-bootstrap"
+        data-sap-ui-theme="sap_horizon" data-sap-ui-libs="sap.m" data-sap-ui-resourceroots='{"sap.ui.demo.odata": "./"}'
+        data-sap-ui-compatVersion="edge" data-sap-ui-async="true">
+        </script>
+    <script>
+        sap.ui.getCore().attachInit(function () {
+            // Test edilecek yol: xs-app.json'daki /sap/(.*) routing'ine uygun yol
+            var sTestUrl = "/sap/opu/odata/sap/YMONO_AKT_PLN_SRV/$metadata";
+
+            var oVBox = new sap.m.VBox({
+                items: [
+                    new sap.m.Title({ text: "Destination (MBP) Connection Test", level: "H1" }).addStyleClass("sapUiSmallMargin"),
+                    new sap.m.Text({ text: "Testing URL: " + window.location.origin + sTestUrl }).addStyleClass("sapUiSmallMarginBottom"),
+                    new sap.m.Button({
+                        text: "Test Connection",
+                        type: "Emphasized",
+                        press: function () {
+                            var oResultArea = sap.ui.getCore().byId("resultArea");
+                            oResultArea.setValue("Testing... Please wait.");
+                            oResultArea.setValueState("None");
+
+                            fetch(sTestUrl)
+                                .then(function (response) {
+                                    return response.text().then(function (text) {
+                                        return { status: response.status, statusText: response.statusText, body: text, headers: response.headers };
+                                    });
+                                })
+                                .then(function (data) {
+                                    var sOutput = "Status: " + data.status + " " + data.statusText + "\n\n";
+
+                                    // Headerları yazdır (X-SAP-Error vb. var mı?)
+                                    sOutput += "--- Headers ---\n";
+                                    data.headers.forEach(function (value, key) {
+                                        sOutput += key + ": " + value + "\n";
+                                    });
+
+                                    sOutput += "\n--- Body (First 500 chars) ---\n";
+                                    sOutput += data.body.substring(0, 500);
+
+                                    if (data.status >= 200 && data.status < 300) {
+                                        oResultArea.setValue(sOutput);
+                                        oResultArea.setValueState("Success");
+                                        sap.m.MessageToast.show("Connection Successful!");
+                                    } else {
+                                        oResultArea.setValue(sOutput);
+                                        oResultArea.setValueState("Error");
+                                        sap.m.MessageToast.show("Connection Failed!");
+                                    }
+                                })
+                                .catch(function (error) {
+                                    oResultArea.setValue("Fetch Error: " + error.message);
+                                    oResultArea.setValueState("Error");
+                                });
+                        }
+                    }),
+                    new sap.m.TextArea("resultArea", {
+                        width: "100%",
+                        rows: 20,
+                        editable: false,
+                        placeholder: "Result will be shown here..."
+                    }).addStyleClass("sapUiSmallMarginTop")
+                ]
+            }).addStyleClass("sapUiMediumMargin");
+
+            oVBox.placeAt("content");
+        });
+    </script>
+</head>
+
+<body class="sapUiBody" id="content">
+</body>
+
+</html>
