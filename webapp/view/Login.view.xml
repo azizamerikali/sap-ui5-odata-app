@@ -1,0 +1,89 @@
+<mvc:View
+	controllerName="sap.ui.demo.odata.controller.Login"
+	xmlns="sap.m"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns:l="sap.ui.layout"
+	xmlns:f="sap.ui.layout.form">
+
+	<Page
+		id="loginPage"
+		title="{i18n>loginViewTitle}"
+		showHeader="true"
+		backgroundDesign="Solid">
+		
+		<content>
+			<l:VerticalLayout
+				class="sapUiContentPadding"
+				width="100%">
+				
+				<l:HorizontalLayout>
+					<VBox
+						class="sapUiMediumMargin"
+						alignItems="Center"
+						justifyContent="Center">
+						
+						<f:SimpleForm
+							id="loginForm"
+							editable="true"
+							layout="ResponsiveGridLayout"
+							title="{i18n>loginFormTitle}"
+							labelSpanXL="4"
+							labelSpanL="4"
+							labelSpanM="4"
+							labelSpanS="12"
+							adjustLabelSpan="false"
+							emptySpanXL="0"
+							emptySpanL="0"
+							emptySpanM="0"
+							emptySpanS="0"
+							columnsXL="1"
+							columnsL="1"
+							columnsM="1"
+							singleContainerFullSize="false">
+							
+							<f:content>
+								<Label text="{i18n>labelUsername}" required="true" />
+								<Input
+									id="usernameInput"
+									placeholder="{i18n>usernamePlaceholder}"
+									value="{/username}"
+									submit=".onLogin" />
+								
+								<Label text="{i18n>labelPassword}" required="true" />
+								<Input
+									id="passwordInput"
+									type="Password"
+									placeholder="{i18n>passwordPlaceholder}"
+									value="{/password}"
+									submit=".onLogin" />
+								
+								<Label text="{i18n>labelServiceUrl}" />
+								<Input
+									id="serviceUrlInput"
+									placeholder="https://..."
+									value="{/serviceUrl}" />
+							</f:content>
+						</f:SimpleForm>
+						
+						<Button
+							id="loginButton"
+							text="{i18n>loginButtonText}"
+							type="Emphasized"
+							width="200px"
+							press=".onLogin"
+							class="sapUiSmallMarginTop" />
+						
+						<MessageStrip
+							id="errorStrip"
+							text="{/errorMessage}"
+							type="Error"
+							showIcon="true"
+							visible="{= ${/errorMessage} !== '' }"
+							class="sapUiSmallMarginTop" />
+							
+					</VBox>
+				</l:HorizontalLayout>
+			</l:VerticalLayout>
+		</content>
+	</Page>
+</mvc:View>

@@ -1,0 +1,84 @@
+<mvc:View
+	controllerName="sap.ui.demo.odata.controller.Object"
+	xmlns="sap.m"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns:f="sap.ui.layout.form"
+    xmlns:core="sap.ui.core">
+
+	<Page
+		id="page"
+		title="{i18n>objectViewTitle}"
+		showNavButton="true"
+		navButtonPress=".onNavBack">
+		
+		<content>
+			<f:SimpleForm
+				id="simpleFormChange"
+				editable="true"
+				layout="ResponsiveGridLayout"
+				title="{i18n>objectFormTitle}"
+				singleContainerFullSize="false" >
+				<f:content>
+                    <Label text="{i18n>labelPersonel}" />
+					<Input id="personelInput" value="{Personel}" />
+
+                    <Label text="{i18n>labelProje}" />
+					<Input id="projeInput" value="{Proje}" />
+
+                    <Label text="{i18n>labelTarih}" />
+                    <DatePicker
+                        id="datePicker"
+                        value="{
+                            path: 'Tarih',
+                            type: 'sap.ui.model.type.Date',
+                            formatOptions: {
+                                style: 'medium'
+                            }
+                        }" />
+
+                    <Label text="{i18n>labelBaslamaSaat}" />
+                    <TimePicker
+                        id="startTimePicker"
+                        value="{
+                             path: 'BaslamaSaat',
+                             type: 'sap.ui.model.type.Time',
+                             formatOptions: {
+                                 pattern: 'HH:mm:ss'
+                             }
+                        }" />
+
+                    <Label text="{i18n>labelBitisSaat}" />
+                    <TimePicker
+                        id="endTimePicker"
+                        value="{
+                             path: 'BitisSaat',
+                             type: 'sap.ui.model.type.Time',
+                             formatOptions: {
+                                 pattern: 'HH:mm:ss'
+                             }
+                        }" />
+
+                    <Label text="{i18n>labelLokasyon}" />
+                    <Select id="locationSelect" selectedKey="{LokasyonType}">
+                        <core:Item key="U" text="Uzaktan (Ev)" />
+                        <core:Item key="O" text="Ofis" />
+                        <core:Item key="M" text="Müşteri" />
+                    </Select>
+					
+					<Label text="{i18n>labelSure}" />
+					<Input id="durationInput" value="{Sure}" type="Number" />
+                    
+                    <Label text="{i18n>labelAciklama}" />
+					<TextArea id="descriptionArea" value="{Aciklama}" rows="4" />
+				</f:content>
+			</f:SimpleForm>
+		</content>
+		<footer>
+			<OverflowToolbar>
+				<ToolbarSpacer />
+				<Button id="saveButton" type="Emphasized" text="{i18n>saveButtonText}" press=".onSave" />
+                <Button id="cancelButton" text="{i18n>cancelButtonText}" press=".onNavBack" />
+			</OverflowToolbar>
+		</footer>
+	</Page>
+</mvc:View>

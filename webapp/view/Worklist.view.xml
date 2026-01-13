@@ -1,0 +1,88 @@
+<mvc:View
+	controllerName="sap.ui.demo.odata.controller.Worklist"
+	xmlns="sap.m"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns:semantic="sap.f.semantic">
+
+	<Page
+		id="page"
+		title="{i18n>worklistViewTitle}">
+		<content>
+			<Table
+				id="table"
+				width="auto"
+				items="{
+					path: '/SummarySet',
+					sorter: {
+						path: 'Tarih',
+						descending: true
+					}
+				}"
+				noDataText="{i18n>worklistNoDataText}"
+				growing="true"
+				growingScrollToLoad="true"
+				updateFinished=".onUpdateFinished">
+
+				<headerToolbar>
+					<OverflowToolbar>
+						<Title id="tableHeader" text="{i18n>worklistTableTitle}" level="H3"/>
+						<ToolbarSpacer />
+						<Button
+							id="addButton"
+							icon="sap-icon://add"
+							tooltip="{i18n>createButtonTooltip}"
+							press=".onAdd"/>
+						<Button
+							id="logoutButton"
+							icon="sap-icon://log"
+							tooltip="{i18n>logoutButtonTooltip}"
+							press=".onLogout"/>
+					</OverflowToolbar>
+				</headerToolbar>
+
+				<columns>
+					<Column id="nameColumn">
+						<Text text="{i18n>tableNameColumnTitle}" id="nameColumnTitle"/>
+					</Column>
+					<Column id="projectColumn">
+						<Text text="{i18n>tableProjectColumnTitle}" id="projectColumnTitle"/>
+					</Column>
+                    <Column id="dateColumn">
+						<Text text="{i18n>tableDateColumnTitle}" id="dateColumnTitle"/>
+					</Column>
+					<Column id="durationColumn" hAlign="End">
+						<Text text="{i18n>tableDurationColumnTitle}" id="durationColumnTitle"/>
+					</Column>
+				</columns>
+
+				<items>
+					<ColumnListItem
+						type="Navigation"
+						press=".onPress">
+						<cells>
+							<ObjectIdentifier
+								title="{PersonelAdi}"
+								text="{Personel}"/>
+							<Text text="{ProjeTxt} ({Proje})" />
+                            <Text text="{
+                                path: 'Tarih',
+                                type: 'sap.ui.model.type.Date',
+                                formatOptions: {
+                                    style: 'medium'
+                                }
+                            }" />
+							<ObjectNumber
+								number="{Sure}"
+								unit="Saat" />
+						</cells>
+					</ColumnListItem>
+				</items>
+			</Table>
+		</content>
+		<footer>
+			<OverflowToolbar>
+				<ToolbarSpacer/>
+			</OverflowToolbar>
+		</footer>
+	</Page>
+</mvc:View>
