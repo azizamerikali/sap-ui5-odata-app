@@ -61,25 +61,44 @@
 							class="sapUiSmallMarginBottom"
 							width="100%" />
 						
-						<Label text="{i18n>labelSapServerUrl}" class="sapUiTinyMarginBottom" />
-						<Input
-							id="sapServerUrlInput"
-							placeholder="https://server:port/sap/opu/odata/sap/SERVICE"
-							value="{/sapServerUrl}"
-							class="sapUiMediumMarginBottom"
-							width="100%" />
-
-						<Label text="{i18n>labelLanguage}" class="sapUiTinyMarginBottom" />
-						<Select
-							id="languageSelect"
-							selectedKey="{/language}"
-							class="sapUiMediumMarginBottom"
+						<Button
+							id="settingsButton"
+							text="{i18n>buttonSettings}"
+							icon="sap-icon://action-settings"
+							type="Transparent"
 							width="100%"
-							change=".onChangeLanguage">
-							<core:Item key="TR" text="Türkçe" />
-							<core:Item key="EN" text="English" />
-							<core:Item key="DE" text="Deutsch" />
-						</Select>
+							press=".onToggleSettings"
+							class="sapUiTinyMarginBottom" />
+
+						<VBox visible="{/showSettings}">
+							<Label text="{i18n>labelServerAddress}" class="sapUiTinyMarginBottom" />
+							<Input
+								id="serverAddressInput"
+								placeholder="https://78.186.247.89:44302"
+								value="{/serverAddress}"
+								class="sapUiMediumMarginBottom"
+								width="100%" />
+
+							<Label text="{i18n>labelServicePath}" class="sapUiTinyMarginBottom" />
+							<Input
+								id="servicePathInput"
+								placeholder="/sap/opu/odata/sap/YMONO_AKT_PLN_SRV"
+								value="{/servicePath}"
+								class="sapUiMediumMarginBottom"
+								width="100%" />
+
+							<Label text="{i18n>labelLanguage}" class="sapUiTinyMarginBottom" />
+							<Select
+								id="languageSelect"
+								selectedKey="{/language}"
+								class="sapUiMediumMarginBottom"
+								width="100%"
+								change=".onChangeLanguage">
+								<core:Item key="TR" text="Türkçe" />
+								<core:Item key="EN" text="English" />
+								<core:Item key="DE" text="Deutsch" />
+							</Select>
+						</VBox>
 						
 						<Button
 							id="loginButton"

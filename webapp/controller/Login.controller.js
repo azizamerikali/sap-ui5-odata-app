@@ -21,19 +21,66 @@ sap.ui.define([
                 sProxyUrl = "/api/sap/";
             }
 
-            // Default SAP Server URL
-            var sDefaultSapUrl = "https://78.186.247.89:44302/sap/opu/odata/sap/YMONO_AKT_PLN_SRV";
+            // Defaults
+            var sDefaultServerAddress = "https://78.186.247.89:44302";
+            var sDefaultServicePath = "/sap/opu/odata/sap/YMONO_AKT_PLN_SRV";
+            var sDefaultLanguage = "TR";
+
+            // Load settings from local storage (SYST structure)
+            var oSettings = this._loadSettings();
+
+            if (oSettings) {
+                sDefaultServerAddress = oSettings.serverAddress || sDefaultServerAddress;
+                sDefaultServicePath = oSettings.servicePath || sDefaultServicePath;
+                sDefaultLanguage = oSettings.language || sDefaultLanguage;
+
+                // Set UI language based on stored setting
+                sap.ui.getCore().getConfiguration().setLanguage(sDefaultLanguage);
+            }
 
             // Create a local model for login form
             var oLoginModel = new JSONModel({
                 username: "",
                 password: "",
                 serviceUrl: sProxyUrl,
-                sapServerUrl: sDefaultSapUrl,
-                language: "TR",
+                serverAddress: sDefaultServerAddress,
+                servicePath: sDefaultServicePath,
+                language: sDefaultLanguage,
+                showSettings: false,
                 errorMessage: ""
             });
             this.getView().setModel(oLoginModel);
+        },
+
+        onToggleSettings: function () {
+            var oModel = this.getView().getModel();
+            var bShow = oModel.getProperty("/showSettings");
+            oModel.setProperty("/showSettings", !bShow);
+        },
+
+        _loadSettings: function () {
+            try {
+                var sSyst = localStorage.getItem("SYST");
+                if (sSyst) {
+                    return JSON.parse(sSyst);
+                }
+            } catch (e) {
+                console.error("Failed to load settings from local storage", e);
+            }
+            return null;
+        },
+
+        _saveSettings: function (sServerAddress, sServicePath, sLanguage) {
+            try {
+                var oSettings = {
+                    serverAddress: sServerAddress,
+                    servicePath: sServicePath,
+                    language: sLanguage
+                };
+                localStorage.setItem("SYST", JSON.stringify(oSettings));
+            } catch (e) {
+                console.error("Failed to save settings to local storage", e);
+            }
         },
 
         onLogin: function () {
@@ -41,8 +88,19 @@ sap.ui.define([
             var sUsername = oModel.getProperty("/username");
             var sPassword = oModel.getProperty("/password");
             var sServiceUrl = oModel.getProperty("/serviceUrl");
-            var sSapServerUrl = oModel.getProperty("/sapServerUrl");
+            var sServerAddress = oModel.getProperty("/serverAddress");
+            var sServicePath = oModel.getProperty("/servicePath");
             var sLanguage = oModel.getProperty("/language");
+
+            // Construct full SAP Server URL
+            // Ensure no double slashes between address and path
+            if (sServerAddress.endsWith("/")) sServerAddress = sServerAddress.slice(0, -1);
+            if (!sServicePath.startsWith("/")) sServicePath = "/" + sServicePath;
+
+            var sSapServerUrl = sServerAddress + sServicePath;
+
+            // Save settings to local storage (SYST)
+            this._saveSettings(sServerAddress, sServicePath, sLanguage);
 
             // Validation
             if (!sUsername || !sPassword) {
@@ -50,7 +108,7 @@ sap.ui.define([
                 return;
             }
 
-            if (!sSapServerUrl) {
+            if (!sServerAddress || !sServicePath) {
                 oModel.setProperty("/errorMessage", this.getResourceBundle().getText("loginErrorNoServer"));
                 return;
             }
