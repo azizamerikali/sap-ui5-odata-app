@@ -22,7 +22,7 @@ sap.ui.define([
             }
 
             // Defaults
-            var sDefaultServerAddress = "https://78.186.247.89:44302";
+            var sDefaultServerAddress = "MBP";
             var sDefaultServicePath = "/sap/opu/odata/sap/YMONO_AKT_PLN_SRV";
             var sDefaultLanguage = "TR";
 
