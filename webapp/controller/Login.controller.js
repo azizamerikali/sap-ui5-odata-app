@@ -83,21 +83,41 @@ sap.ui.define([
             }, 15000);
 
             // Test connection by reading metadata
+            // Test connection by reading metadata
             oDataModel.metadataLoaded().then(function () {
-                clearTimeout(timeoutId);
-                sap.ui.core.BusyIndicator.hide();
+                // Metadata might be cached in browser, so it resolves even with wrong password!
+                // We must verify the login by making a real read request
 
-                // Store credentials in the model for later use (session only, not persisted)
-                oDataModel.setHeaders({
-                    "Authorization": sAuth,
-                    "X-SAP-Target-URL": sSapServerUrl
+                oDataModel.read("/SummarySet", {
+                    urlParameters: {
+                        "$top": 1
+                    },
+                    success: function () {
+                        // Login verified!
+                        clearTimeout(timeoutId);
+                        sap.ui.core.BusyIndicator.hide();
+
+                        // Store credentials in the model for later use (session only, not persisted)
+                        oDataModel.setHeaders({
+                            "Authorization": sAuth,
+                            "X-SAP-Target-URL": sSapServerUrl
+                        });
+
+                        // Set the OData model as the default model on the component
+                        that.getOwnerComponent().setModel(oDataModel);
+
+                        // Navigate to worklist
+                        that.getRouter().navTo("worklist");
+                    },
+                    error: function (oError) {
+                        // Login failed (probably 401)
+                        clearTimeout(timeoutId);
+                        sap.ui.core.BusyIndicator.hide();
+
+                        var sErrorMsg = that._parseResponseError(oError);
+                        oModel.setProperty("/errorMessage", sErrorMsg);
+                    }
                 });
-
-                // Set the OData model as the default model on the component
-                that.getOwnerComponent().setModel(oDataModel);
-
-                // Navigate to worklist
-                that.getRouter().navTo("worklist");
 
             }).catch(function (oError) {
                 clearTimeout(timeoutId);
