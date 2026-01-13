@@ -1,10 +1,12 @@
 const express = require('express');
 const cors = require('cors');
 const https = require('https');
-const http = require('http');
 
 const app = express();
 const PORT = 3000;
+
+// Default SAP OData base URL (fallback)
+const DEFAULT_SAP_URL = 'https://78.186.247.89:44302/sap/opu/odata/sap/YMONO_AKT_PLN_SRV';
 
 // Enable CORS for all origins
 app.use(cors());
@@ -12,9 +14,6 @@ app.use(cors());
 // Parse JSON bodies
 app.use(express.json());
 app.use(express.text({ type: '*/*' }));
-
-// SAP OData base URL (without trailing slash)
-const SAP_BASE_URL = 'https://78.186.247.89:44302/sap/opu/odata/sap/YMONO_AKT_PLN_SRV';
 
 // Create an HTTPS agent that ignores SSL certificate errors
 const httpsAgent = new https.Agent({
@@ -24,11 +23,15 @@ const httpsAgent = new https.Agent({
 // Proxy all requests to SAP
 app.all('/sap/*', async (req, res) => {
     try {
+        // Get SAP target URL from header or use default
+        const sapBaseUrl = req.headers['x-sap-target-url'] || DEFAULT_SAP_URL;
+
         // Get the path after /sap/
         const sapPath = req.path.replace('/sap', '');
-        const targetUrl = SAP_BASE_URL + sapPath + (req.url.includes('?') ? req.url.substring(req.url.indexOf('?')) : '');
+        const targetUrl = sapBaseUrl + sapPath + (req.url.includes('?') ? req.url.substring(req.url.indexOf('?')) : '');
 
         console.log(`[PROXY] ${req.method} ${targetUrl}`);
+        console.log(`[PROXY] SAP Target: ${sapBaseUrl}`);
 
         // Get authorization header from request
         const authHeader = req.headers.authorization;
@@ -114,8 +117,8 @@ app.listen(PORT, () => {
     console.log(`SAP OData Proxy Server`);
     console.log(`=================================`);
     console.log(`Proxy running on: http://localhost:${PORT}`);
-    console.log(`SAP Target: ${SAP_BASE_URL}`);
+    console.log(`Default SAP Target: ${DEFAULT_SAP_URL}`);
     console.log(`\nProxy endpoint: http://localhost:${PORT}/sap/`);
-    console.log(`Example: http://localhost:${PORT}/sap/SummarySet`);
+    console.log(`\nUse X-SAP-Target-URL header to override target`);
     console.log(`=================================\n`);
 });

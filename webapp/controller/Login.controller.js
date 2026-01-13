@@ -21,11 +21,15 @@ sap.ui.define([
                 sProxyUrl = "/api/sap/";
             }
 
+            // Default SAP Server URL
+            var sDefaultSapUrl = "https://78.186.247.89:44302/sap/opu/odata/sap/YMONO_AKT_PLN_SRV";
+
             // Create a local model for login form
             var oLoginModel = new JSONModel({
                 username: "",
                 password: "",
                 serviceUrl: sProxyUrl,
+                sapServerUrl: sDefaultSapUrl,
                 errorMessage: ""
             });
             this.getView().setModel(oLoginModel);
@@ -36,10 +40,16 @@ sap.ui.define([
             var sUsername = oModel.getProperty("/username");
             var sPassword = oModel.getProperty("/password");
             var sServiceUrl = oModel.getProperty("/serviceUrl");
+            var sSapServerUrl = oModel.getProperty("/sapServerUrl");
 
             // Validation
             if (!sUsername || !sPassword) {
                 oModel.setProperty("/errorMessage", this.getResourceBundle().getText("loginErrorEmpty"));
+                return;
+            }
+
+            if (!sSapServerUrl) {
+                oModel.setProperty("/errorMessage", this.getResourceBundle().getText("loginErrorNoServer"));
                 return;
             }
 
@@ -57,7 +67,8 @@ sap.ui.define([
             // Create OData model with Basic Auth through proxy
             var oDataModel = new ODataModel(sServiceUrl, {
                 headers: {
-                    "Authorization": sAuth
+                    "Authorization": sAuth,
+                    "X-SAP-Target-URL": sSapServerUrl
                 },
                 useBatch: false,
                 disableHeadRequestForToken: true,
@@ -78,7 +89,8 @@ sap.ui.define([
 
                 // Store credentials in the model for later use (session only, not persisted)
                 oDataModel.setHeaders({
-                    "Authorization": sAuth
+                    "Authorization": sAuth,
+                    "X-SAP-Target-URL": sSapServerUrl
                 });
 
                 // Set the OData model as the default model on the component

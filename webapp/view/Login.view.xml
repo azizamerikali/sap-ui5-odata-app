@@ -61,7 +61,14 @@
 								<Input
 									id="serviceUrlInput"
 									placeholder="https://..."
-									value="{/serviceUrl}" />
+									value="{/serviceUrl}"
+									editable="false" />
+								
+								<Label text="{i18n>labelSapServerUrl}" />
+								<Input
+									id="sapServerUrlInput"
+									placeholder="https://hostname:port/sap/opu/odata/sap/SERVICE_NAME"
+									value="{/sapServerUrl}" />
 							</f:content>
 						</f:SimpleForm>
 						

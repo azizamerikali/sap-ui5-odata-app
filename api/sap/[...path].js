@@ -1,14 +1,14 @@
 const https = require('https');
 
-// SAP OData base URL
-const SAP_BASE_URL = 'https://78.186.247.89:44302/sap/opu/odata/sap/YMONO_AKT_PLN_SRV';
+// Default SAP OData base URL (fallback)
+const DEFAULT_SAP_URL = 'https://78.186.247.89:44302/sap/opu/odata/sap/YMONO_AKT_PLN_SRV';
 
 module.exports = async (req, res) => {
     // Enable CORS
     res.setHeader('Access-Control-Allow-Credentials', 'true');
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
-    res.setHeader('Access-Control-Allow-Headers', 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, Authorization');
+    res.setHeader('Access-Control-Allow-Headers', 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, Authorization, X-SAP-Target-URL');
 
     // Handle preflight
     if (req.method === 'OPTIONS') {
@@ -17,15 +17,19 @@ module.exports = async (req, res) => {
     }
 
     try {
+        // Get the SAP target URL from header or use default
+        const sapBaseUrl = req.headers['x-sap-target-url'] || DEFAULT_SAP_URL;
+
         // Get the SAP path from the URL
         // URL format: /api/sap/SummarySet or /api/sap/$metadata
         const urlPath = req.url;
         const sapPath = urlPath.replace('/api/sap', '');
 
         // Build target URL
-        const targetUrl = SAP_BASE_URL + sapPath;
+        const targetUrl = sapBaseUrl + sapPath;
 
         console.log(`[PROXY] ${req.method} ${targetUrl}`);
+        console.log(`[PROXY] SAP Target: ${sapBaseUrl}`);
 
         // Get authorization header
         const authHeader = req.headers.authorization;
