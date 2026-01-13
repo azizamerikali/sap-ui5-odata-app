@@ -138,10 +138,22 @@ sap.ui.define([
                 clearTimeout(timeoutId);
                 sap.ui.core.BusyIndicator.hide();
 
+                sap.ui.core.BusyIndicator.hide();
+
                 var oResponse = oEvent.getParameter("response");
                 var sErrorMsg = that._parseResponseError(oResponse);
                 oModel.setProperty("/errorMessage", sErrorMsg);
             });
+        },
+
+        onChangeLanguage: function (oEvent) {
+            var sLanguage = oEvent.getParameter("selectedItem").getKey();
+
+            // Set UI5 Core configuration language
+            sap.ui.getCore().getConfiguration().setLanguage(sLanguage);
+
+            // Re-bind texts for the view (optional, but good practice for instant update)
+            // But usually setLanguage triggers automatic update of resource models
         },
 
         _getErrorMessage: function (oError) {

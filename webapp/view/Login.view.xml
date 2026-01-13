@@ -74,7 +74,8 @@
 							id="languageSelect"
 							selectedKey="{/language}"
 							class="sapUiMediumMarginBottom"
-							width="100%">
+							width="100%"
+							change=".onChangeLanguage">
 							<core:Item key="TR" text="Türkçe" />
 							<core:Item key="EN" text="English" />
 							<core:Item key="DE" text="Deutsch" />
