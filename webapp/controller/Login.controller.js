@@ -99,6 +99,13 @@ sap.ui.define([
 
             var sSapServerUrl = sServerAddress + sServicePath;
 
+            // Detect environment and adjust Service URL
+            // On BTP, we must use the direct relative path (sServicePath) so xs-app.json routes it to Destination.
+            // On Local/Vercel, we use the proxy middleware (sServiceUrl from model initialized in onInit).
+            if (window.location.hostname.includes("hana.ondemand.com")) {
+                sServiceUrl = sServicePath;
+            }
+
             // Save settings to local storage (SYST)
             this._saveSettings(sServerAddress, sServicePath, sLanguage);
 

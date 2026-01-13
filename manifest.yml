@@ -1,0 +1,10 @@
+---
+applications:
+  - name: sap-ui5-odata-app
+    path: .
+    memory: 128M
+    buildpacks:
+      - nodejs_buildpack
+    services:
+      - sap-ui5-odata-app-destination-service
+      - sap-ui5-odata-app-xsuaa-srv

@@ -5,17 +5,19 @@
     "main": "proxy.js",
     "scripts": {
         "proxy": "node proxy.js",
-        "start": "concurrently \"npm run proxy\" \"npx http-server ./webapp -p 8080 --cors\"",
+        "start": "node node_modules/@sap/approuter/approuter.js",
+        "start-local": "concurrently \"npm run proxy\" \"npx http-server ./webapp -p 8080 --cors\"",
         "serve": "npx http-server ./webapp -p 8080 --cors -o",
         "build:cf": "ui5 build --clean-dest --dest dist"
     },
     "dependencies": {
+        "@sap/approuter": "^20.8.8",
+        "cors": "^2.8.5",
         "express": "^4.18.2",
-        "node-fetch": "^2.7.0",
-        "cors": "^2.8.5"
+        "node-fetch": "^2.7.0"
     },
     "devDependencies": {
-        "concurrently": "^8.2.2",
-        "@ui5/cli": "^3.0.0"
+        "@ui5/cli": "^3.0.0",
+        "concurrently": "^8.2.2"
     }
 }
