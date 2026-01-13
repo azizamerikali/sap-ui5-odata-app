@@ -3,81 +3,150 @@
 	xmlns="sap.m"
 	xmlns:mvc="sap.ui.core.mvc"
 	xmlns:f="sap.ui.layout.form"
-    xmlns:core="sap.ui.core">
+    xmlns:core="sap.ui.core"
+	xmlns:l="sap.ui.layout">
 
 	<Page
 		id="page"
 		title="{i18n>objectViewTitle}"
 		showNavButton="true"
-		navButtonPress=".onNavBack">
+		navButtonPress=".onNavBack"
+		class="sapUiContentPadding">
+		
+		<customHeader>
+			<Bar>
+				<contentLeft>
+					<Button
+						icon="sap-icon://nav-back"
+						type="Transparent"
+						press=".onNavBack" />
+				</contentLeft>
+				<contentMiddle>
+					<Title text="{i18n>objectViewTitle}" level="H4" />
+				</contentMiddle>
+			</Bar>
+		</customHeader>
 		
 		<content>
-			<f:SimpleForm
-				id="simpleFormChange"
-				editable="true"
-				layout="ResponsiveGridLayout"
-				title="{i18n>objectFormTitle}"
-				singleContainerFullSize="false" >
-				<f:content>
-                    <Label text="{i18n>labelPersonel}" />
-					<Input id="personelInput" value="{Personel}" />
-
-                    <Label text="{i18n>labelProje}" />
-					<Input id="projeInput" value="{Proje}" />
-
-                    <Label text="{i18n>labelTarih}" />
-                    <DatePicker
-                        id="datePicker"
-                        value="{
-                            path: 'Tarih',
-                            type: 'sap.ui.model.type.Date',
-                            formatOptions: {
-                                style: 'medium'
-                            }
-                        }" />
-
-                    <Label text="{i18n>labelBaslamaSaat}" />
-                    <TimePicker
-                        id="startTimePicker"
-                        value="{
-                             path: 'BaslamaSaat',
-                             type: 'sap.ui.model.type.Time',
-                             formatOptions: {
-                                 pattern: 'HH:mm:ss'
-                             }
-                        }" />
-
-                    <Label text="{i18n>labelBitisSaat}" />
-                    <TimePicker
-                        id="endTimePicker"
-                        value="{
-                             path: 'BitisSaat',
-                             type: 'sap.ui.model.type.Time',
-                             formatOptions: {
-                                 pattern: 'HH:mm:ss'
-                             }
-                        }" />
-
-                    <Label text="{i18n>labelLokasyon}" />
-                    <Select id="locationSelect" selectedKey="{LokasyonType}">
-                        <core:Item key="U" text="Uzaktan (Ev)" />
-                        <core:Item key="O" text="Ofis" />
-                        <core:Item key="M" text="Müşteri" />
-                    </Select>
+			<l:VerticalLayout width="100%" class="sapUiSmallMarginTop">
+				
+				<!-- Header Card -->
+				<Panel 
+					headerText="{i18n>objectFormTitle}"
+					expandable="false"
+					expanded="true"
+					class="sapUiSmallMarginBottom">
 					
-					<Label text="{i18n>labelSure}" />
-					<Input id="durationInput" value="{Sure}" type="Number" />
-                    
-                    <Label text="{i18n>labelAciklama}" />
-					<TextArea id="descriptionArea" value="{Aciklama}" rows="4" />
-				</f:content>
-			</f:SimpleForm>
+					<content>
+						<f:SimpleForm
+							id="simpleFormChange"
+							editable="true"
+							layout="ResponsiveGridLayout"
+							labelSpanXL="3"
+							labelSpanL="3"
+							labelSpanM="4"
+							labelSpanS="12"
+							columnsXL="2"
+							columnsL="2"
+							columnsM="1"
+							singleContainerFullSize="false">
+							
+							<f:content>
+								<core:Title text="Personel Bilgileri" />
+								
+								<Label text="{i18n>labelPersonel}" />
+								<Input id="personelInput" value="{Personel}" />
+
+								<Label text="Personel Adı" />
+								<Input id="personelNameInput" value="{PersonelAdi}" editable="false" />
+
+								<Label text="Modül" />
+								<Input id="modulInput" value="{Modul}" />
+
+								<core:Title text="Proje Bilgileri" />
+
+								<Label text="{i18n>labelProje}" />
+								<Input id="projeInput" value="{Proje}" />
+
+								<Label text="Proje Adı" />
+								<Input id="projeTxtInput" value="{ProjeTxt}" editable="false" />
+
+								<Label text="Müşteri" />
+								<Input id="customerInput" value="{Customer}" />
+
+								<core:Title text="Zaman Bilgileri" />
+
+								<Label text="{i18n>labelTarih}" />
+								<DatePicker
+									id="datePicker"
+									value="{
+										path: 'Tarih',
+										type: 'sap.ui.model.type.Date',
+										formatOptions: {
+											style: 'medium'
+										}
+									}" />
+
+								<Label text="{i18n>labelBaslamaSaat}" />
+								<TimePicker
+									id="startTimePicker"
+									value="{
+										 path: 'BaslamaSaat',
+										 type: 'sap.ui.model.type.Time',
+										 formatOptions: {
+											 pattern: 'HH:mm:ss'
+										 }
+									}" />
+
+								<Label text="{i18n>labelBitisSaat}" />
+								<TimePicker
+									id="endTimePicker"
+									value="{
+										 path: 'BitisSaat',
+										 type: 'sap.ui.model.type.Time',
+										 formatOptions: {
+											 pattern: 'HH:mm:ss'
+										 }
+									}" />
+
+								<core:Title text="Lokasyon ve Süre" />
+
+								<Label text="{i18n>labelLokasyon}" />
+								<Select id="locationSelect" selectedKey="{LokasyonType}">
+									<core:Item key="U" text="Uzaktan (Ev)" />
+									<core:Item key="O" text="Ofis" />
+									<core:Item key="Y" text="Yerinde (Müşteri)" />
+								</Select>
+								
+								<Label text="{i18n>labelSure}" />
+								<Input id="durationInput" value="{Sure}" type="Number" />
+								
+								<core:Title text="Açıklama" />
+								
+								<Label text="{i18n>labelAciklama}" />
+								<TextArea id="descriptionArea" value="{Aciklama}" rows="4" width="100%" />
+							</f:content>
+						</f:SimpleForm>
+					</content>
+				</Panel>
+				
+			</l:VerticalLayout>
 		</content>
+		
 		<footer>
 			<OverflowToolbar>
 				<ToolbarSpacer />
-				<Button id="saveButton" type="Emphasized" text="{i18n>saveButtonText}" press=".onSave" />
-                <Button id="cancelButton" text="{i18n>cancelButtonText}" press=".onNavBack" />
+				<Button 
+					id="cancelButton" 
+					text="{i18n>cancelButtonText}" 
+					press=".onNavBack"
+					type="Transparent" />
+				<Button 
+					id="saveButton" 
+					type="Emphasized" 
+					text="{i18n>saveButtonText}" 
+					press=".onSave"
+					icon="sap-icon://save" />
 			</OverflowToolbar>
 		</footer>
 	</Page>

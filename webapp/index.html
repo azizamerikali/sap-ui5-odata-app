@@ -1,20 +1,17 @@
 <!DOCTYPE html>
 <html>
+
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>OpenUI5 OData App</title>
-	<script
-		id="sap-ui-bootstrap"
-		src="https://openui5.hana.ondemand.com/resources/sap-ui-core.js"
-		data-sap-ui-theme="sap_fiori_3"
-		data-sap-ui-resourceroots='{
+	<title>SAP Fiori OData App</title>
+	<link rel="stylesheet" href="css/style.css">
+	<script id="sap-ui-bootstrap" src="https://openui5.hana.ondemand.com/resources/sap-ui-core.js"
+		data-sap-ui-theme="sap_horizon" data-sap-ui-resourceroots='{
 			"sap.ui.demo.odata": "./"
-		}'
-		data-sap-ui-compatVersion="edge"
-		data-sap-ui-async="true"
-		data-sap-ui-frameOptions="trusted">
-	</script>
+		}' data-sap-ui-compatVersion="edge" data-sap-ui-async="true" data-sap-ui-frameOptions="trusted"
+		data-sap-ui-preload="async">
+		</script>
 	<script>
 		sap.ui.getCore().attachInit(function () {
 			sap.ui.require([
@@ -22,8 +19,8 @@
 			], function (ComponentContainer) {
 				new ComponentContainer({
 					name: "sap.ui.demo.odata",
-					settings : {
-						id : "odata"
+					settings: {
+						id: "odata"
 					},
 					async: true
 				}).placeAt("content");
@@ -31,6 +28,8 @@
 		});
 	</script>
 </head>
+
 <body class="sapUiBody" id="content">
 </body>
+
 </html>

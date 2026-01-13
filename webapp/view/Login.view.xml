@@ -3,82 +3,81 @@
 	xmlns="sap.m"
 	xmlns:mvc="sap.ui.core.mvc"
 	xmlns:l="sap.ui.layout"
-	xmlns:f="sap.ui.layout.form">
+	xmlns:f="sap.ui.layout.form"
+	xmlns:core="sap.ui.core">
 
 	<Page
 		id="loginPage"
-		title="{i18n>loginViewTitle}"
-		showHeader="true"
-		backgroundDesign="Solid">
+		showHeader="false"
+		backgroundDesign="Solid"
+		class="sapUiContentPadding">
 		
 		<content>
-			<l:VerticalLayout
-				class="sapUiContentPadding"
-				width="100%">
+			<FlexBox
+				height="100%"
+				alignItems="Center"
+				justifyContent="Center"
+				class="loginPageContainer">
 				
-				<l:HorizontalLayout>
-					<VBox
-						class="sapUiMediumMargin"
-						alignItems="Center"
-						justifyContent="Center">
+				<VBox class="loginCard sapUiMediumMargin">
+					
+					<!-- Logo Section -->
+					<HBox justifyContent="Center" class="sapUiMediumMarginBottom">
+						<core:Icon 
+							src="sap-icon://business-objects-experience"
+							size="3rem"
+							color="#0a6ed1" />
+					</HBox>
+					
+					<Title 
+						text="SAP OData Client"
+						level="H2"
+						textAlign="Center"
+						class="sapUiSmallMarginBottom" />
+					
+					<Text 
+						text="{i18n>loginFormTitle}"
+						textAlign="Center"
+						class="sapUiMediumMarginBottom sapUiTinyMarginTop" />
+					
+					<!-- Login Form -->
+					<VBox class="sapUiSmallMarginTop">
 						
-						<f:SimpleForm
-							id="loginForm"
-							editable="true"
-							layout="ResponsiveGridLayout"
-							title="{i18n>loginFormTitle}"
-							labelSpanXL="4"
-							labelSpanL="4"
-							labelSpanM="4"
-							labelSpanS="12"
-							adjustLabelSpan="false"
-							emptySpanXL="0"
-							emptySpanL="0"
-							emptySpanM="0"
-							emptySpanS="0"
-							columnsXL="1"
-							columnsL="1"
-							columnsM="1"
-							singleContainerFullSize="false">
-							
-							<f:content>
-								<Label text="{i18n>labelUsername}" required="true" />
-								<Input
-									id="usernameInput"
-									placeholder="{i18n>usernamePlaceholder}"
-									value="{/username}"
-									submit=".onLogin" />
-								
-								<Label text="{i18n>labelPassword}" required="true" />
-								<Input
-									id="passwordInput"
-									type="Password"
-									placeholder="{i18n>passwordPlaceholder}"
-									value="{/password}"
-									submit=".onLogin" />
-								
-								<Label text="{i18n>labelServiceUrl}" />
-								<Input
-									id="serviceUrlInput"
-									placeholder="https://..."
-									value="{/serviceUrl}"
-									editable="false" />
-								
-								<Label text="{i18n>labelSapServerUrl}" />
-								<Input
-									id="sapServerUrlInput"
-									placeholder="https://hostname:port/sap/opu/odata/sap/SERVICE_NAME"
-									value="{/sapServerUrl}" />
-							</f:content>
-						</f:SimpleForm>
+						<Label text="{i18n>labelUsername}" required="true" class="sapUiTinyMarginBottom" />
+						<Input
+							id="usernameInput"
+							placeholder="{i18n>usernamePlaceholder}"
+							value="{/username}"
+							submit=".onLogin"
+							class="sapUiSmallMarginBottom"
+							width="100%" />
+						
+						<Label text="{i18n>labelPassword}" required="true" class="sapUiTinyMarginBottom" />
+						<Input
+							id="passwordInput"
+							type="Password"
+							placeholder="{i18n>passwordPlaceholder}"
+							value="{/password}"
+							submit=".onLogin"
+							class="sapUiSmallMarginBottom"
+							width="100%" />
+						
+						<Label text="{i18n>labelSapServerUrl}" class="sapUiTinyMarginBottom" />
+						<Input
+							id="sapServerUrlInput"
+							placeholder="https://hostname:port/sap/opu/odata/sap/SERVICE_NAME"
+							value="{/sapServerUrl}"
+							class="sapUiMediumMarginBottom"
+							width="100%" />
 						
 						<Button
 							id="loginButton"
 							text="{i18n>loginButtonText}"
 							type="Emphasized"
-							width="200px"
+							width="100%"
 							press=".onLogin"
-							class="sapUiSmallMarginTop" />
+							icon="sap-icon://log"
+							class="sapUiSmallMarginTop sapUiSmallMarginBottom" />
 						
 						<MessageStrip
 							id="errorStrip"
@@ -89,8 +88,14 @@
 							class="sapUiSmallMarginTop" />
 							
 					</VBox>
-				</l:HorizontalLayout>
-			</l:VerticalLayout>
+					
+					<!-- Footer -->
+					<HBox justifyContent="Center" class="sapUiMediumMarginTop">
+						<Text text="Powered by OpenUI5" class="sapUiTinyText" />
+					</HBox>
+					
+				</VBox>
+			</FlexBox>
 		</content>
 	</Page>
 </mvc:View>

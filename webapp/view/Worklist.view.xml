@@ -2,11 +2,36 @@
 	controllerName="sap.ui.demo.odata.controller.Worklist"
 	xmlns="sap.m"
 	xmlns:mvc="sap.ui.core.mvc"
-	xmlns:semantic="sap.f.semantic">
+	xmlns:core="sap.ui.core">
 
 	<Page
 		id="page"
-		title="{i18n>worklistViewTitle}">
+		title="{i18n>worklistViewTitle}"
+		showNavButton="false"
+		class="sapUiContentPadding">
+		
+		<customHeader>
+			<Bar>
+				<contentMiddle>
+					<Title text="{i18n>worklistViewTitle}" level="H4" />
+				</contentMiddle>
+				<contentRight>
+					<Button
+						id="addButton"
+						icon="sap-icon://add"
+						type="Emphasized"
+						tooltip="{i18n>createButtonTooltip}"
+						press=".onAdd"/>
+					<Button
+						id="logoutButton"
+						icon="sap-icon://log"
+						type="Transparent"
+						tooltip="{i18n>logoutButtonTooltip}"
+						press=".onLogout"/>
+				</contentRight>
+			</Bar>
+		</customHeader>
+		
 		<content>
 			<Table
 				id="table"
@@ -21,36 +46,41 @@
 				noDataText="{i18n>worklistNoDataText}"
 				growing="true"
 				growingScrollToLoad="true"
-				updateFinished=".onUpdateFinished">
+				growingThreshold="20"
+				updateFinished=".onUpdateFinished"
+				mode="SingleSelectMaster"
+				class="sapUiSmallMarginTop">
 
 				<headerToolbar>
 					<OverflowToolbar>
 						<Title id="tableHeader" text="{i18n>worklistTableTitle}" level="H3"/>
 						<ToolbarSpacer />
-						<Button
-							id="addButton"
-							icon="sap-icon://add"
-							tooltip="{i18n>createButtonTooltip}"
-							press=".onAdd"/>
-						<Button
-							id="logoutButton"
-							icon="sap-icon://log"
-							tooltip="{i18n>logoutButtonTooltip}"
-							press=".onLogout"/>
+						<SearchField
+							id="searchField"
+							width="300px"
+							placeholder="Ara..."
+							search=".onSearch"
+							showRefreshButton="true" />
 					</OverflowToolbar>
 				</headerToolbar>
 
 				<columns>
-					<Column id="nameColumn">
+					<Column id="nameColumn" width="20%">
 						<Text text="{i18n>tableNameColumnTitle}" id="nameColumnTitle"/>
 					</Column>
-					<Column id="projectColumn">
+					<Column id="projectColumn" width="25%">
 						<Text text="{i18n>tableProjectColumnTitle}" id="projectColumnTitle"/>
 					</Column>
-                    <Column id="dateColumn">
+					<Column id="customerColumn" width="15%">
+						<Text text="Müşteri" id="customerColumnTitle"/>
+					</Column>
+                    <Column id="dateColumn" width="15%">
 						<Text text="{i18n>tableDateColumnTitle}" id="dateColumnTitle"/>
 					</Column>
-					<Column id="durationColumn" hAlign="End">
+					<Column id="locationColumn" width="10%">
+						<Text text="Lokasyon" id="locationColumnTitle"/>
+					</Column>
+					<Column id="durationColumn" hAlign="End" width="10%">
 						<Text text="{i18n>tableDurationColumnTitle}" id="durationColumnTitle"/>
 					</Column>
 				</columns>
@@ -63,7 +93,13 @@
 							<ObjectIdentifier
 								title="{PersonelAdi}"
 								text="{Personel}"/>
-							<Text text="{ProjeTxt} ({Proje})" />
+							<VBox>
+								<Text text="{ProjeTxt}" class="sapUiTinyMarginBottom" />
+								<ObjectStatus 
+									text="{Proje}" 
+									state="Information" />
+							</VBox>
+							<Text text="{Customer}" />
                             <Text text="{
                                 path: 'Tarih',
                                 type: 'sap.ui.model.type.Date',
@@ -71,16 +107,23 @@
                                     style: 'medium'
                                 }
                             }" />
+							<ObjectStatus 
+								text="{LokasyonTxt}"
+								state="{= ${LokasyonType} === 'O' ? 'Success' : (${LokasyonType} === 'U' ? 'Warning' : 'Information') }" />
 							<ObjectNumber
 								number="{Sure}"
-								unit="Saat" />
+								unit="Saat"
+								state="Success" />
 						</cells>
 					</ColumnListItem>
 				</items>
 			</Table>
 		</content>
+		
 		<footer>
 			<OverflowToolbar>
+				<ToolbarSpacer/>
+				<Text text="© 2026 SAP OData Client" class="sapUiTinyText" />
 				<ToolbarSpacer/>
 			</OverflowToolbar>
 		</footer>
