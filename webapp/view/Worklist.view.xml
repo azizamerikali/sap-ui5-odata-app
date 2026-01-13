@@ -48,7 +48,7 @@
 				growingScrollToLoad="true"
 				growingThreshold="20"
 				updateFinished=".onUpdateFinished"
-				mode="SingleSelectMaster"
+				mode="None"
 				class="sapUiSmallMarginTop">
 
 				<headerToolbar>

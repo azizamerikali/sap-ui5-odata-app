@@ -31,8 +31,13 @@ sap.ui.define([
                 this.getView().setBindingContext(oContext);
             } else {
                 // Edit mode
+                // Use createKey to generate the correct path (handles guid'...' wrapper automatically)
+                var sPath = oModel.createKey("/SummarySet", {
+                    Guid: sObjectId
+                });
+
                 this.getView().bindElement({
-                    path: "/SummarySet(guid'" + sObjectId + "')",
+                    path: sPath,
                     events: {
                         dataReceived: function (oData) {
                             if (!oData) {
