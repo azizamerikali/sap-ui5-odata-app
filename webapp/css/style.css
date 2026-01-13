@@ -1,51 +1,86 @@
 /* SAP Fiori Style Enhancements */
 
-/* Login Page Styling */
-.loginPageContainer {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 80vh;
-    background: linear-gradient(135deg, #354A5F 0%, #2C3E50 100%);
+/* Login Page Background */
+.sapMPage.sapMPageBgSolid {
+    background: linear-gradient(135deg, #354A5F 0%, #1a2634 100%) !important;
 }
 
+/* Login Card */
 .loginCard {
-    background: #ffffff;
-    border-radius: 0.5rem;
-    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
-    padding: 2rem;
-    min-width: 400px;
-    max-width: 500px;
+    background: #ffffff !important;
+    border-radius: 8px !important;
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.3) !important;
+    padding: 40px !important;
+    min-width: 380px !important;
+    max-width: 420px !important;
 }
 
-.loginLogo {
-    text-align: center;
-    margin-bottom: 1.5rem;
+.loginCard .sapMTitle {
+    color: #32363a !important;
+    font-weight: 700 !important;
 }
 
-.loginLogo .sapMText {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: #0a6ed1;
+.loginCard .sapMText {
+    color: #6a6d70 !important;
 }
 
-/* Header Styling */
-.sapMPageHeader {
-    background-color: #354A5F !important;
+.loginCard .sapMLabel {
+    color: #32363a !important;
+    font-weight: 600 !important;
 }
 
-.sapMPageHeader .sapMTitle {
+.loginCard .sapMInputBaseInner {
+    background: #f7f7f7 !important;
+    border: 1px solid #d9d9d9 !important;
+    border-radius: 4px !important;
+}
+
+.loginCard .sapMInputBaseInner:focus {
+    border-color: #0a6ed1 !important;
+    box-shadow: 0 0 0 2px rgba(10, 110, 209, 0.2) !important;
+}
+
+/* Login Button */
+.loginCard .sapMBtnEmphasized {
+    background: #0a6ed1 !important;
+    border-color: #0a6ed1 !important;
+    border-radius: 4px !important;
+    height: 44px !important;
+    font-weight: 600 !important;
+}
+
+.loginCard .sapMBtnEmphasized:hover {
+    background: #085cad !important;
+}
+
+/* Footer Text */
+.sapUiTinyText {
+    font-size: 12px !important;
+    color: #6a6d70 !important;
+}
+
+/* Header Bar */
+.sapMBar {
+    background: #354A5F !important;
+}
+
+.sapMBar .sapMTitle {
+    color: #ffffff !important;
+}
+
+.sapMBar .sapMBtn {
     color: #ffffff !important;
 }
 
 /* Table Styling */
 .sapMList {
-    border-radius: 0.25rem;
+    border-radius: 8px;
     overflow: hidden;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
 }
 
 .sapMListTblHeader {
-    background-color: #f5f6f7 !important;
+    background-color: #f7f7f7 !important;
 }
 
 .sapMListTblCell {
@@ -56,95 +91,81 @@
     background-color: #f0f7ff !important;
 }
 
-/* Button Styling */
-.sapMBtnEmphasized {
-    background-color: #0a6ed1 !important;
-    border-color: #0a6ed1 !important;
+/* Object Status Colors */
+.sapMObjStatusSuccess {
+    color: #107e3e !important;
 }
 
-.sapMBtnEmphasized:hover {
-    background-color: #085cad !important;
+.sapMObjStatusWarning {
+    color: #e9730c !important;
 }
 
-/* Form Styling */
-.sapUiFormTitle {
-    color: #354A5F;
-    font-weight: 600;
-}
-
-.sapMInputBase {
-    border-radius: 0.25rem;
-}
-
-/* Object Page Styling */
-.sapMOHTitle {
-    color: #354A5F !important;
-}
-
-/* Page Background */
-.sapMPage > section {
-    background-color: #f5f6f7;
-}
-
-/* Footer Toolbar */
-.sapMTB {
-    background-color: #ffffff;
-    border-top: 1px solid #e5e5e5;
-}
-
-/* Message Strip */
-.sapMMsgStrip {
-    border-radius: 0.25rem;
-}
-
-/* Compact Density for Desktop */
-.sapUiSizeCompact .sapMInputBase {
-    height: 2rem;
-}
-
-/* Card-like containers */
-.sapUiFormContainer {
-    background: #ffffff;
-    border-radius: 0.5rem;
-    padding: 1rem;
-    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
-    margin-bottom: 1rem;
-}
-
-/* Toolbar Improvements */
-.sapMTBShrinkItem {
-    background: transparent;
-}
-
-/* Loading Indicator */
-.sapUiLocalBusyIndicator {
-    background-color: rgba(255, 255, 255, 0.7);
-}
-
-/* Input Focus */
-.sapMInputFocused {
-    border-color: #0a6ed1 !important;
-    box-shadow: 0 0 0 0.125rem rgba(10, 110, 209, 0.25) !important;
-}
-
-/* ObjectNumber Styling */
-.sapMObjectNumber {
-    color: #0a6ed1;
-}
-
-/* Header Toolbar */
-.sapMListHdr {
-    background-color: #ffffff;
-    border-bottom: 2px solid #0a6ed1;
+.sapMObjStatusInformation {
+    color: #0a6ed1 !important;
 }
 
 /* Panel Styling */
 .sapMPanel {
-    border-radius: 0.5rem;
+    border-radius: 8px !important;
     overflow: hidden;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1) !important;
+    background: #ffffff !important;
 }
 
 .sapMPanelHdr {
-    background-color: #f5f6f7;
-    border-bottom: 1px solid #e5e5e5;
+    background: #f7f7f7 !important;
+    border-bottom: 1px solid #e5e5e5 !important;
+    color: #32363a !important;
+    font-weight: 600 !important;
+}
+
+/* Form Title */
+.sapUiFormTitle {
+    color: #0a6ed1 !important;
+    font-weight: 600 !important;
+    border-bottom: 2px solid #0a6ed1 !important;
+    padding-bottom: 8px !important;
+    margin-bottom: 16px !important;
+}
+
+/* Input Fields */
+.sapMInputBase {
+    border-radius: 4px !important;
+}
+
+/* Footer Toolbar */
+.sapMTB.sapMFooter-CTX {
+    background: #ffffff !important;
+    border-top: 1px solid #e5e5e5 !important;
+}
+
+/* Page Content Background */
+.sapMPage>section {
+    background-color: #f5f6f7 !important;
+}
+
+/* Search Field */
+.sapMSF {
+    border-radius: 4px !important;
+}
+
+/* Object Number */
+.sapMObjectNumber {
+    color: #0a6ed1 !important;
+}
+
+/* Toolbar Header */
+.sapMListHdr .sapMTB {
+    background: #ffffff !important;
+    border-bottom: 2px solid #0a6ed1 !important;
+}
+
+/* Message Strip */
+.sapMMsgStrip {
+    border-radius: 4px !important;
+}
+
+/* Compact mode adjustments */
+.sapUiSizeCompact .loginCard {
+    padding: 32px !important;
 }

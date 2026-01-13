@@ -3,45 +3,44 @@
 	xmlns="sap.m"
 	xmlns:mvc="sap.ui.core.mvc"
 	xmlns:l="sap.ui.layout"
-	xmlns:f="sap.ui.layout.form"
 	xmlns:core="sap.ui.core">
 
 	<Page
 		id="loginPage"
 		showHeader="false"
 		backgroundDesign="Solid"
-		class="sapUiContentPadding">
+		enableScrolling="false">
 		
 		<content>
 			<FlexBox
-				height="100%"
+				height="100vh"
 				alignItems="Center"
 				justifyContent="Center"
-				class="loginPageContainer">
+				direction="Column">
 				
-				<VBox class="loginCard sapUiMediumMargin">
+				<VBox class="loginCard">
 					
 					<!-- Logo Section -->
 					<HBox justifyContent="Center" class="sapUiMediumMarginBottom">
 						<core:Icon 
 							src="sap-icon://business-objects-experience"
-							size="3rem"
+							size="4rem"
 							color="#0a6ed1" />
 					</HBox>
 					
 					<Title 
 						text="SAP OData Client"
-						level="H2"
+						level="H3"
 						textAlign="Center"
-						class="sapUiSmallMarginBottom" />
+						class="sapUiTinyMarginBottom" />
 					
 					<Text 
 						text="{i18n>loginFormTitle}"
 						textAlign="Center"
-						class="sapUiMediumMarginBottom sapUiTinyMarginTop" />
+						class="sapUiLargeMarginBottom" />
 					
 					<!-- Login Form -->
-					<VBox class="sapUiSmallMarginTop">
+					<VBox>
 						
 						<Label text="{i18n>labelUsername}" required="true" class="sapUiTinyMarginBottom" />
 						<Input
@@ -65,7 +64,7 @@
 						<Label text="{i18n>labelSapServerUrl}" class="sapUiTinyMarginBottom" />
 						<Input
 							id="sapServerUrlInput"
-							placeholder="https://hostname:port/sap/opu/odata/sap/SERVICE_NAME"
+							placeholder="https://server:port/sap/opu/odata/sap/SERVICE"
 							value="{/sapServerUrl}"
 							class="sapUiMediumMarginBottom"
 							width="100%" />
@@ -77,7 +76,7 @@
 							width="100%"
 							press=".onLogin"
 							icon="sap-icon://log"
-							class="sapUiSmallMarginTop sapUiSmallMarginBottom" />
+							class="sapUiMediumMarginTop" />
 						
 						<MessageStrip
 							id="errorStrip"
@@ -90,7 +89,7 @@
 					</VBox>
 					
 					<!-- Footer -->
-					<HBox justifyContent="Center" class="sapUiMediumMarginTop">
+					<HBox justifyContent="Center" class="sapUiLargeMarginTop">
 						<Text text="Powered by OpenUI5" class="sapUiTinyText" />
 					</HBox>
 					
