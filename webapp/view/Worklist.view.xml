@@ -33,6 +33,54 @@
 		</customHeader>
 		
 		<content>
+			<Panel
+				id="filterPanel"
+				headerText="{i18n>filterPanelTitle}"
+				expandable="true"
+				expanded="true"
+				width="auto"
+				class="sapUiResponsiveMargin">
+				<content>
+					<VBox>
+						<HBox wrap="Wrap" alignItems="Center">
+							<VBox class="sapUiSmallMarginEnd sapUiTinyMarginBottom">
+								<Label text="{i18n>tableNameColumnTitle}" />
+								<Input
+									id="searchPersonel"
+									placeholder="{i18n>tableNameColumnTitle}"
+									width="200px"
+									showValueHelp="true"
+									valueHelpRequest=".onValueHelpRequest"
+									customData:col="Personel"
+									xmlns:customData="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1" />
+							</VBox>
+							<VBox class="sapUiSmallMarginEnd sapUiTinyMarginBottom">
+								<Label text="{i18n>tableProjectColumnTitle}" />
+								<Input
+									id="searchProject"
+									placeholder="{i18n>tableProjectColumnTitle}"
+									width="200px"
+									showValueHelp="true"
+									valueHelpRequest=".onValueHelpRequest" 
+									customData:col="Proje"
+									xmlns:customData="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1" />
+							</VBox>
+							<VBox class="sapUiSmallMarginEnd sapUiTinyMarginBottom">
+								<Label text="{i18n>labelDateRange}" />
+								<DateRangeSelection
+									id="searchDate"
+									width="250px"
+									delimiter=" - "
+									displayFormat="medium" />
+							</VBox>
+						</HBox>
+						<HBox justifyContent="End" class="sapUiTinyMarginTop">
+							<Button text="{i18n>buttonSearch}" type="Emphasized" press=".onFilterSearch" class="sapUiTinyMarginEnd" icon="sap-icon://search"/>
+							<Button text="{i18n>buttonClear}" press=".onFilterClear" icon="sap-icon://clear-filter"/>
+						</HBox>
+					</VBox>
+				</content>
+			</Panel>
 			<Table
 				id="table"
 				width="auto"
