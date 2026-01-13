@@ -1,0 +1,8 @@
+{
+    "xsappname": "sap-ui5-odata-app",
+    "tenant-mode": "dedicated",
+    "description": "Security profile for the SAP UI5 OData App",
+    "scopes": [],
+    "attributes": [],
+    "role-templates": []
+}

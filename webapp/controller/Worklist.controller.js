@@ -106,12 +106,12 @@ sap.ui.define([
             // Configure dialog based on requested column
             if (sColumn === "Personel") {
                 sTitle = this.getResourceBundle().getText("tableNameColumnTitle");
-                sBindingPath = "/SummarySet"; // Ideally distinct, but mapping to SummarySet for demo
+                sBindingPath = "/VHPersonelSet";
                 sKeyInfo = "Personel";
                 sDescInfo = "PersonelAdi";
             } else if (sColumn === "Proje") {
                 sTitle = this.getResourceBundle().getText("tableProjectColumnTitle");
-                sBindingPath = "/SummarySet";
+                sBindingPath = "/VHProjeSet";
                 sKeyInfo = "Proje";
                 sDescInfo = "ProjeTxt";
             }

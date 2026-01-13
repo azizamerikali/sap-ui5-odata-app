@@ -6,7 +6,8 @@
     "scripts": {
         "proxy": "node proxy.js",
         "start": "concurrently \"npm run proxy\" \"npx http-server ./webapp -p 8080 --cors\"",
-        "serve": "npx http-server ./webapp -p 8080 --cors -o"
+        "serve": "npx http-server ./webapp -p 8080 --cors -o",
+        "build:cf": "ui5 build --clean-dest --dest dist"
     },
     "dependencies": {
         "express": "^4.18.2",
@@ -14,6 +15,7 @@
         "cors": "^2.8.5"
     },
     "devDependencies": {
-        "concurrently": "^8.2.2"
+        "concurrently": "^8.2.2",
+        "@ui5/cli": "^3.0.0"
     }
 }
