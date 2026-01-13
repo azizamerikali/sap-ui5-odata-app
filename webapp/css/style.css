@@ -1,8 +1,17 @@
 /* SAP Fiori Style Enhancements */
 
 /* Login Page Background */
+body,
+.sapUiBody {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !important;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
 .sapMPage.sapMPageBgSolid {
     background: linear-gradient(135deg, #354A5F 0%, #1a2634 100%) !important;
+    will-change: transform;
+    /* GPU Optimization hint */
 }
 
 /* Login Card */
