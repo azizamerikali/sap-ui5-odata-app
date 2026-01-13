@@ -68,6 +68,17 @@
 							value="{/sapServerUrl}"
 							class="sapUiMediumMarginBottom"
 							width="100%" />
+
+						<Label text="{i18n>labelLanguage}" class="sapUiTinyMarginBottom" />
+						<Select
+							id="languageSelect"
+							selectedKey="{/language}"
+							class="sapUiMediumMarginBottom"
+							width="100%">
+							<core:Item key="TR" text="Türkçe" />
+							<core:Item key="EN" text="English" />
+							<core:Item key="DE" text="Deutsch" />
+						</Select>
 						
 						<Button
 							id="loginButton"

@@ -8,7 +8,7 @@ module.exports = async (req, res) => {
     res.setHeader('Access-Control-Allow-Credentials', 'true');
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
-    res.setHeader('Access-Control-Allow-Headers', 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, Authorization, X-SAP-Target-URL');
+    res.setHeader('Access-Control-Allow-Headers', 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, Authorization, X-SAP-Target-URL, sap-language, sap-langu');
 
     // Handle preflight
     if (req.method === 'OPTIONS') {
@@ -56,6 +56,14 @@ module.exports = async (req, res) => {
         // Add X-CSRF-Token if present
         if (req.headers['x-csrf-token']) {
             options.headers['X-CSRF-Token'] = req.headers['x-csrf-token'];
+        }
+
+        // Add Language headers if present
+        if (req.headers['sap-language']) {
+            options.headers['sap-language'] = req.headers['sap-language'];
+        }
+        if (req.headers['sap-langu']) {
+            options.headers['sap-langu'] = req.headers['sap-langu'];
         }
 
         // Make request to SAP

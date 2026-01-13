@@ -53,6 +53,14 @@ app.all('/sap/*', async (req, res) => {
             headers['X-CSRF-Token'] = req.headers['x-csrf-token'];
         }
 
+        // Add Language headers if present
+        if (req.headers['sap-language']) {
+            headers['sap-language'] = req.headers['sap-language'];
+        }
+        if (req.headers['sap-langu']) {
+            headers['sap-langu'] = req.headers['sap-langu'];
+        }
+
         // Prepare fetch options
         const fetchOptions = {
             method: req.method,

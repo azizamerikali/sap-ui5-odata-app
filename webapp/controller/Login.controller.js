@@ -30,6 +30,7 @@ sap.ui.define([
                 password: "",
                 serviceUrl: sProxyUrl,
                 sapServerUrl: sDefaultSapUrl,
+                language: "TR",
                 errorMessage: ""
             });
             this.getView().setModel(oLoginModel);
@@ -41,6 +42,7 @@ sap.ui.define([
             var sPassword = oModel.getProperty("/password");
             var sServiceUrl = oModel.getProperty("/serviceUrl");
             var sSapServerUrl = oModel.getProperty("/sapServerUrl");
+            var sLanguage = oModel.getProperty("/language");
 
             // Validation
             if (!sUsername || !sPassword) {
@@ -68,7 +70,9 @@ sap.ui.define([
             var oDataModel = new ODataModel(sServiceUrl, {
                 headers: {
                     "Authorization": sAuth,
-                    "X-SAP-Target-URL": sSapServerUrl
+                    "X-SAP-Target-URL": sSapServerUrl,
+                    "sap-language": sLanguage,
+                    "sap-langu": sLanguage
                 },
                 useBatch: false,
                 disableHeadRequestForToken: true,
@@ -100,7 +104,9 @@ sap.ui.define([
                         // Store credentials in the model for later use (session only, not persisted)
                         oDataModel.setHeaders({
                             "Authorization": sAuth,
-                            "X-SAP-Target-URL": sSapServerUrl
+                            "X-SAP-Target-URL": sSapServerUrl,
+                            "sap-language": sLanguage,
+                            "sap-langu": sLanguage
                         });
 
                         // Set the OData model as the default model on the component
