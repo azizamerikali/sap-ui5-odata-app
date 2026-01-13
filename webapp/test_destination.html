@@ -17,47 +17,22 @@
                     new sap.m.Title({ text: "Destination (MBP) Connection Test", level: "H1" }).addStyleClass("sapUiSmallMargin"),
                     new sap.m.Text({ text: "Testing URL: " + window.location.origin + sTestUrl }).addStyleClass("sapUiSmallMarginBottom"),
                     new sap.m.Button({
-                        text: "Test Connection",
+                        text: "Test Connection (OData Metadata)",
                         type: "Emphasized",
                         press: function () {
-                            var oResultArea = sap.ui.getCore().byId("resultArea");
-                            oResultArea.setValue("Testing... Please wait.");
-                            oResultArea.setValueState("None");
-
-                            fetch(sTestUrl)
-                                .then(function (response) {
-                                    return response.text().then(function (text) {
-                                        return { status: response.status, statusText: response.statusText, body: text, headers: response.headers };
-                                    });
-                                })
-                                .then(function (data) {
-                                    var sOutput = "Status: " + data.status + " " + data.statusText + "\n\n";
-
-                                    // Headerları yazdır (X-SAP-Error vb. var mı?)
-                                    sOutput += "--- Headers ---\n";
-                                    data.headers.forEach(function (value, key) {
-                                        sOutput += key + ": " + value + "\n";
-                                    });
-
-                                    sOutput += "\n--- Body (First 500 chars) ---\n";
-                                    sOutput += data.body.substring(0, 500);
-
-                                    if (data.status >= 200 && data.status < 300) {
-                                        oResultArea.setValue(sOutput);
-                                        oResultArea.setValueState("Success");
-                                        sap.m.MessageToast.show("Connection Successful!");
-                                    } else {
-                                        oResultArea.setValue(sOutput);
-                                        oResultArea.setValueState("Error");
-                                        sap.m.MessageToast.show("Connection Failed!");
-                                    }
-                                })
-                                .catch(function (error) {
-                                    oResultArea.setValue("Fetch Error: " + error.message);
-                                    oResultArea.setValueState("Error");
-                                });
+                            // ... existing fetch logic ...
+                            testConnection(sTestUrl);
                         }
                     }),
+                    new sap.m.Button({
+                        text: "Test Connection (Root Path /)",
+                        type: "Default",
+                        press: function () {
+                            // Test root path to check basic server reachability
+                            var sRootTestUrl = "/sap/"; // Try to hit the sap root
+                            testConnection(sRootTestUrl);
+                        }
+                    }).addStyleClass("sapUiSmallMarginTop"),
                     new sap.m.TextArea("resultArea", {
                         width: "100%",
                         rows: 20,
@@ -66,6 +41,46 @@
                     }).addStyleClass("sapUiSmallMarginTop")
                 ]
             }).addStyleClass("sapUiMediumMargin");
+
+            function testConnection(url) {
+                var oResultArea = sap.ui.getCore().byId("resultArea");
+                oResultArea.setValue("Testing " + url + "... Please wait.");
+                oResultArea.setValueState("None");
+
+                fetch(url)
+                    .then(function (response) {
+                        return response.text().then(function (text) {
+                            return { status: response.status, statusText: response.statusText, body: text, headers: response.headers };
+                        });
+                    })
+                    .then(function (data) {
+                        var sOutput = "Tested URL: " + url + "\n";
+                        sOutput += "Status: " + data.status + " " + data.statusText + "\n\n";
+
+                        // Headerları yazdır
+                        sOutput += "--- Headers ---\n";
+                        data.headers.forEach(function (value, key) {
+                            sOutput += key + ": " + value + "\n";
+                        });
+
+                        sOutput += "\n--- Body (First 500 chars) ---\n";
+                        sOutput += data.body.substring(0, 500);
+
+                        if (data.status >= 200 && data.status < 300) {
+                            oResultArea.setValue(sOutput);
+                            oResultArea.setValueState("Success");
+                            sap.m.MessageToast.show("Connection Successful!");
+                        } else {
+                            oResultArea.setValue(sOutput);
+                            oResultArea.setValueState("Error");
+                            sap.m.MessageToast.show("Connection Failed!");
+                        }
+                    })
+                    .catch(function (error) {
+                        oResultArea.setValue("Fetch Error: " + error.message);
+                        oResultArea.setValueState("Error");
+                    });
+            }
 
             oVBox.placeAt("content");
         });
