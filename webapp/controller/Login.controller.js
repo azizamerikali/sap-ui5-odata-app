@@ -9,12 +9,23 @@ sap.ui.define([
     return Controller.extend("sap.ui.demo.odata.controller.Login", {
 
         onInit: function () {
+            // Detect if running on Vercel or locally
+            var sCurrentHost = window.location.host;
+            var sProxyUrl;
+
+            if (sCurrentHost.includes('localhost') || sCurrentHost.includes('127.0.0.1')) {
+                // Local development - use local proxy
+                sProxyUrl = "http://localhost:3000/sap/";
+            } else {
+                // Vercel deployment - use serverless function
+                sProxyUrl = "/api/sap/";
+            }
+
             // Create a local model for login form
-            // Use proxy URL instead of direct SAP URL
             var oLoginModel = new JSONModel({
                 username: "",
                 password: "",
-                serviceUrl: "http://localhost:3000/sap/",
+                serviceUrl: sProxyUrl,
                 errorMessage: ""
             });
             this.getView().setModel(oLoginModel);
