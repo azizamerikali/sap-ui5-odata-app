@@ -8,8 +8,12 @@ const PORT = 3000;
 // Default SAP OData base URL (fallback)
 const DEFAULT_SAP_URL = 'https://78.186.247.89:44302/sap/opu/odata/sap/YMONO_AKT_PLN_SRV';
 
-// Enable CORS for all origins
-app.use(cors());
+// Enable CORS with credentials support
+app.use(cors({
+    origin: true, // Reflects the request origin
+    credentials: true, // Allows cookies to be sent
+    exposedHeaders: ['x-csrf-token', 'content-type', 'sap-message', 'sap-messages', 'location']
+}));
 
 // Parse JSON bodies
 app.use(express.json());
@@ -90,9 +94,12 @@ app.all('/sap/*', async (req, res) => {
         const rawCookies = response.headers.raw()['set-cookie'];
         if (rawCookies) {
             const sanitizedCookies = rawCookies.map(cookie => {
-                // Remove Domain attribute to allow localhost setting; keep Path=/sap/ or similar
-                // Also could remove Secure if testing on http, but httpsAgent ignores invalid certs
-                return cookie.replace(/Domain=[^;]+;?/gi, '');
+                // Remove Domain attribute to allow localhost setting
+                let newCookie = cookie.replace(/Domain=[^;]+;?/gi, '');
+                // Force Path=/ to ensure it's shared across localhost ports/paths
+                newCookie = newCookie.replace(/Path=[^;]+;?/gi, '');
+                newCookie = newCookie + '; Path=/';
+                return newCookie;
             });
             res.setHeader('Set-Cookie', sanitizedCookies);
         }
