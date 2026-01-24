@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>SAP WebGUI Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: #0854a0;
+        }
+
+        .status {
+            padding: 10px 15px;
+            border-radius: 4px;
+            margin: 10px 0;
+            font-weight: bold;
+        }
+
+        .status.loading {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+
+        .status.success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .status.error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .info-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            background: white;
+        }
+
+        .info-table th,
+        .info-table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+
+        .info-table th {
+            background-color: #0854a0;
+            color: white;
+        }
+
+        .response-area {
+            background: white;
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 4px;
+            max-height: 500px;
+            overflow: auto;
+            white-space: pre-wrap;
+            font-family: monospace;
+            font-size: 12px;
+        }
+
+        button {
+            background-color: #0854a0;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin: 5px;
+        }
+
+        button:hover {
+            background-color: #064079;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>SAP WebGUI API Test</h1>
+
+        <div>
+            <button onclick="testWebGUI()">WebGUI Çağır</button>
+            <button onclick="clearResponse()">Temizle</button>
+        </div>
+
+        <div id="status" class="status loading" style="display:none;"></div>
+
+        <table class="info-table" id="infoTable" style="display:none;">
+            <tr>
+                <th>Bilgi</th>
+                <th>Değer</th>
+            </tr>
+            <tr>
+                <td>URL</td>
+                <td id="infoUrl"></td>
+            </tr>
+            <tr>
+                <td>Status</td>
+                <td id="infoStatus"></td>
+            </tr>
+            <tr>
+                <td>Content-Type</td>
+                <td id="infoContentType"></td>
+            </tr>
+        </table>
+
+        <h3>Response Headers:</h3>
+        <div id="headersArea" class="response-area" style="max-height: 150px;"></div>
+
+        <h3>Response Body (ilk 2000 karakter):</h3>
+        <div id="responseArea" class="response-area"></div>
+    </div>
+
+    <script>
+        function testWebGUI() {
+            var url = "http://localhost:3000/sap/bc/gui/sap/its/webgui";
+            var statusDiv = document.getElementById("status");
+            var infoTable = document.getElementById("infoTable");
+            var responseArea = document.getElementById("responseArea");
+            var headersArea = document.getElementById("headersArea");
+
+            statusDiv.style.display = "block";
+            statusDiv.className = "status loading";
+            statusDiv.textContent = "İstek gönderiliyor: " + url;
+            infoTable.style.display = "none";
+            responseArea.textContent = "";
+            headersArea.textContent = "";
+
+            fetch(url, {
+                method: "GET",
+                credentials: "include"
+            })
+                .then(function (response) {
+                    return response.text().then(function (text) {
+                        return {
+                            status: response.status,
+                            statusText: response.statusText,
+                            headers: response.headers,
+                            body: text,
+                            ok: response.ok
+                        };
+                    });
+                })
+                .then(function (data) {
+                    // Status güncelle
+                    if (data.ok) {
+                        statusDiv.className = "status success";
+                        statusDiv.textContent = "Başarılı!";
+                    } else {
+                        statusDiv.className = "status error";
+                        statusDiv.textContent = "Hata: " + data.status + " " + data.statusText;
+                    }
+
+                    // Info table
+                    infoTable.style.display = "table";
+                    document.getElementById("infoUrl").textContent = url;
+                    document.getElementById("infoStatus").textContent = data.status + " " + data.statusText;
+                    document.getElementById("infoContentType").textContent = data.headers.get("content-type") || "-";
+
+                    // Headers
+                    var headersText = "";
+                    data.headers.forEach(function (value, key) {
+                        headersText += key + ": " + value + "\n";
+                    });
+                    headersArea.textContent = headersText || "Header bilgisi alınamadı";
+
+                    // Body (ilk 2000 karakter)
+                    responseArea.textContent = data.body.substring(0, 2000);
+                    if (data.body.length > 2000) {
+                        responseArea.textContent += "\n\n... (" + (data.body.length - 2000) + " karakter daha)";
+                    }
+                })
+                .catch(function (error) {
+                    statusDiv.className = "status error";
+                    statusDiv.textContent = "Fetch Hatası: " + error.message;
+                    responseArea.textContent = error.toString();
+                });
+        }
+
+        function clearResponse() {
+            document.getElementById("status").style.display = "none";
+            document.getElementById("infoTable").style.display = "none";
+            document.getElementById("responseArea").textContent = "";
+            document.getElementById("headersArea").textContent = "";
+        }
+
+        // Sayfa yüklendiğinde otomatik çağır
+        window.onload = testWebGUI;
+    </script>
+</body>
+
+</html>

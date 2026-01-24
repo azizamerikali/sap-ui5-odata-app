@@ -23,6 +23,12 @@
 						tooltip="{i18n>createButtonTooltip}"
 						press=".onAdd"/>
 					<Button
+						id="webguiButton"
+						icon="sap-icon://desktop-mobile"
+						type="Transparent"
+						tooltip="SAP WebGUI"
+						press=".onWebGUI"/>
+					<Button
 						id="logoutButton"
 						icon="sap-icon://log"
 						type="Transparent"

@@ -1,7 +1,17 @@
 {
     "welcomeFile": "/sapuidemoodata/index.html",
     "authenticationMethod": "route",
+    "websockets": {
+        "enabled": true
+    },
     "routes": [
+        {
+            "source": "^/sap\\((.*)\\)/(.*)$",
+            "target": "/sap($1)/$2",
+            "destination": "MBP",
+            "authenticationType": "none",
+            "csrfProtection": false
+        },
         {
             "source": "^/sap/(.*)$",
             "target": "/sap/$1",

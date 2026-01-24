@@ -222,6 +222,50 @@ sap.ui.define([
             return this.getOwnerComponent().getModel("i18n").getResourceBundle();
         },
 
+        onWebGUI: function () {
+            // SAP WebGUI URL
+            var sWebGUIUrl = "/sap/bc/gui/sap/its/webgui";
+
+            // OData model'den Authorization header'ını al
+            var oModel = this.getOwnerComponent().getModel();
+            var oHeaders = oModel ? oModel.getHeaders() : {};
+            var sAuth = oHeaders["Authorization"] || "";
+
+            if (sAuth) {
+                // Kullanıcı adı ve şifreyi Base64'ten decode et
+                var sCredentials = sAuth.replace("Basic ", "");
+                var sDecoded = atob(sCredentials);
+                var aCredentials = sDecoded.split(":");
+                var sUsername = aCredentials[0];
+                var sPassword = aCredentials.slice(1).join(":"); // Şifrede : olabilir
+
+                // Form ile POST gönder (aynı pencerede)
+                var oForm = document.createElement("form");
+                oForm.method = "POST";
+                oForm.action = sWebGUIUrl;
+                oForm.target = "_self";
+
+                // SAP WebGUI için gerekli alanlar
+                var oUserInput = document.createElement("input");
+                oUserInput.type = "hidden";
+                oUserInput.name = "sap-user";
+                oUserInput.value = sUsername;
+                oForm.appendChild(oUserInput);
+
+                var oPassInput = document.createElement("input");
+                oPassInput.type = "hidden";
+                oPassInput.name = "sap-password";
+                oPassInput.value = sPassword;
+                oForm.appendChild(oPassInput);
+
+                document.body.appendChild(oForm);
+                oForm.submit();
+            } else {
+                // Auth yoksa direkt yönlendir
+                window.location.href = sWebGUIUrl;
+            }
+        },
+
         onLogout: function () {
             var that = this;
 
