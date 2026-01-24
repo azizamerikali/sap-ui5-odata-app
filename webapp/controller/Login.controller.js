@@ -131,84 +131,83 @@ sap.ui.define([
             // Show busy indicator
             sap.ui.core.BusyIndicator.show(0);
 
-            // Create OData model with Basic Auth through proxy
-            var oDataModel = new ODataModel(sServiceUrl, {
+            // Perform login via Fetch API to ensure cookies are saved (withCredentials: true behavior)
+            fetch(sServiceUrl + "/SummarySet?$top=1", {
+                method: "GET",
                 headers: {
                     "Authorization": sAuth,
                     "X-SAP-Target-URL": sSapServerUrl,
                     "sap-language": sLanguage,
-                    "sap-langu": sLanguage
+                    "sap-langu": sLanguage,
+                    "Accept": "application/json"
                 },
-                useBatch: false,
-                disableHeadRequestForToken: true,
-                tokenHandling: false,
-                json: true
-            });
+                credentials: "include" // Critical: Request cookies to be saved/sent
+            })
+                .then(function (response) {
+                    if (!response.ok) {
+                        throw response;
+                    }
+                    return response.json();
+                })
+                .then(function () {
+                    // Login verified via Fetch!
+                    clearTimeout(timeoutId);
+                    sap.ui.core.BusyIndicator.hide();
 
-            // Set timeout for metadata loading
-            var timeoutId = setTimeout(function () {
-                sap.ui.core.BusyIndicator.hide();
-                oModel.setProperty("/errorMessage", that.getResourceBundle().getText("loginErrorTimeout"));
-            }, 15000);
-
-            // Test connection by reading metadata
-            // Test connection by reading metadata
-            oDataModel.metadataLoaded().then(function () {
-                // Metadata might be cached in browser, so it resolves even with wrong password!
-                // We must verify the login by making a real read request
-
-                oDataModel.read("/SummarySet", {
-                    urlParameters: {
-                        "$top": 1
-                    },
-                    success: function () {
-                        // Login verified!
-                        clearTimeout(timeoutId);
-                        sap.ui.core.BusyIndicator.hide();
-
-                        // Store credentials in the model for later use (session only, not persisted)
-                        oDataModel.setHeaders({
-                            "Authorization": sAuth,
+                    // Now create the OData Model for the app
+                    // It will use the headers we provide, and hopefully share the session if supported
+                    var oDataModel = new ODataModel(sServiceUrl, {
+                        headers: {
+                            "Authorization": sAuth, // Keep sending auth header just in case
                             "X-SAP-Target-URL": sSapServerUrl,
                             "sap-language": sLanguage,
                             "sap-langu": sLanguage
+                        },
+                        useBatch: false,
+                        disableHeadRequestForToken: true,
+                        tokenHandling: false,
+                        json: true
+                    });
+
+                    // Attach Request Failed handler globally for this model
+                    oDataModel.attachRequestFailed(function (oEvent) {
+                        var oResponse = oEvent.getParameter("response");
+                        var sErrorMsg = that._parseResponseError(oResponse);
+                        oModel.setProperty("/errorMessage", sErrorMsg);
+                    });
+
+                    // Set the OData model as the default model on the component
+                    that.getOwnerComponent().setModel(oDataModel);
+
+                    // Navigate to worklist
+                    that.getRouter().navTo("worklist");
+
+                })
+                .catch(function (errorResponse) {
+                    // Login failed
+                    clearTimeout(timeoutId);
+                    sap.ui.core.BusyIndicator.hide();
+
+                    if (errorResponse instanceof Response) {
+                        // Start reading body to get error details
+                        errorResponse.text().then(function (text) {
+                            var simulatedResponse = {
+                                statusCode: errorResponse.status,
+                                responseText: text
+                            };
+                            var sErrorMsg = that._parseResponseError(simulatedResponse);
+                            oModel.setProperty("/errorMessage", sErrorMsg);
+                        }).catch(function () {
+                            // Fallback if text read fails
+                            var sErrorMsg = that._parseResponseError({ statusCode: errorResponse.status });
+                            oModel.setProperty("/errorMessage", sErrorMsg);
                         });
-
-                        // Set the OData model as the default model on the component
-                        that.getOwnerComponent().setModel(oDataModel);
-
-                        // Navigate to worklist
-                        that.getRouter().navTo("worklist");
-                    },
-                    error: function (oError) {
-                        // Login failed (probably 401)
-                        clearTimeout(timeoutId);
-                        sap.ui.core.BusyIndicator.hide();
-
-                        var sErrorMsg = that._parseResponseError(oError);
+                    } else {
+                        // Network error or other
+                        var sErrorMsg = that._getErrorMessage(errorResponse);
                         oModel.setProperty("/errorMessage", sErrorMsg);
                     }
                 });
-
-            }).catch(function (oError) {
-                clearTimeout(timeoutId);
-                sap.ui.core.BusyIndicator.hide();
-
-                var sErrorMsg = that._getErrorMessage(oError);
-                oModel.setProperty("/errorMessage", sErrorMsg);
-            });
-
-            // Also handle request failed
-            oDataModel.attachRequestFailed(function (oEvent) {
-                clearTimeout(timeoutId);
-                sap.ui.core.BusyIndicator.hide();
-
-                sap.ui.core.BusyIndicator.hide();
-
-                var oResponse = oEvent.getParameter("response");
-                var sErrorMsg = that._parseResponseError(oResponse);
-                oModel.setProperty("/errorMessage", sErrorMsg);
-            });
         },
 
         onChangeLanguage: function (oEvent) {
