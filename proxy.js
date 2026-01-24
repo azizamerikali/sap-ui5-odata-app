@@ -61,6 +61,11 @@ app.all('/sap/*', async (req, res) => {
             headers['sap-langu'] = req.headers['sap-langu'];
         }
 
+        // Forward Cookie header if present
+        if (req.headers.cookie) {
+            headers['Cookie'] = req.headers.cookie;
+        }
+
         // Prepare fetch options
         const fetchOptions = {
             method: req.method,
@@ -80,9 +85,21 @@ app.all('/sap/*', async (req, res) => {
 
         // Get response headers we want to forward
         const responseHeaders = {};
+
+        // Forward set-cookie with sanitation
+        const rawCookies = response.headers.raw()['set-cookie'];
+        if (rawCookies) {
+            const sanitizedCookies = rawCookies.map(cookie => {
+                // Remove Domain attribute to allow localhost setting; keep Path=/sap/ or similar
+                // Also could remove Secure if testing on http, but httpsAgent ignores invalid certs
+                return cookie.replace(/Domain=[^;]+;?/gi, '');
+            });
+            res.setHeader('Set-Cookie', sanitizedCookies);
+        }
+
         response.headers.forEach((value, key) => {
             // Forward important headers
-            if (['content-type', 'x-csrf-token', 'sap-message'].includes(key.toLowerCase())) {
+            if (['content-type', 'x-csrf-token', 'sap-message', 'sap-messages', 'location'].includes(key.toLowerCase())) {
                 responseHeaders[key] = value;
             }
         });
@@ -96,12 +113,16 @@ app.all('/sap/*', async (req, res) => {
         const contentType = response.headers.get('content-type') || '';
         let body;
 
+        // Use arraybuffer for potentially binary data (e.g. images, favicon)
+        const buffer = await response.arrayBuffer();
+        const bufferContent = Buffer.from(buffer);
+
         if (contentType.includes('application/json')) {
-            body = await response.json();
-            res.status(response.status).json(body);
+            // If strictly JSON, we can try to parse it, but sending buffer is safer to preserve exact content
+            // unless we want to modify the JSON. Sending buffer is fine for proxy.
+            res.status(response.status).send(bufferContent);
         } else {
-            body = await response.text();
-            res.status(response.status).send(body);
+            res.status(response.status).send(bufferContent);
         }
 
         console.log(`[PROXY] Response: ${response.status}`);
