@@ -16,3 +16,10 @@ Thumbs.db
 # Logs
 *.log
 npm-debug.log*
+# Build Artifacts
+dist/
+resources/
+mta_archives/
+*.zip
+.ui5_mta_build_tmp/
+Makefile_*.mta

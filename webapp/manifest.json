@@ -10,6 +10,10 @@
 			"version": "1.0.0"
 		}
 	},
+	"sap.cloud": {
+		"public": true,
+		"service": "sap-ui5-odata-app"
+	},
 	"sap.ui": {
 		"technology": "UI5",
 		"icons": {

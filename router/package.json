@@ -1,0 +1,11 @@
+{
+    "name": "sap-ui5-odata-app-router",
+    "version": "1.0.0",
+    "description": "AppRouter for SAP UI5 OData App",
+    "scripts": {
+        "start": "node node_modules/@sap/approuter/approuter.js"
+    },
+    "dependencies": {
+        "@sap/approuter": "^14.0.0"
+    }
+}

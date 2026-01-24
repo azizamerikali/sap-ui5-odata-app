@@ -44,18 +44,30 @@ modules:
     build-result: resources
     requires:
     - artifacts:
-      - sapui5odataapp.zip
+      - sap-ui5-odata-app.zip
       name: sap-ui5-odata-app
       target-path: resources/
+- name: sap-ui5-odata-app-router
+  type: nodejs
+  path: router
+  parameters:
+    disk-quota: 256M
+    memory: 128M
+  requires:
+  - name: sap-ui5-odata-app-uaa
+  - name: sap-ui5-odata-app-destination-service
+  - name: sap-ui5-odata-app-html5-repo-runtime
+  - name: sap-ui5-odata-app-connectivity
+
 - name: sap-ui5-odata-app
   type: html5
   path: .
   build-parameters:
-    build-result: dist
+    build-result: .
     builder: custom
     commands:
     - npm install
-    - npm run build:cf
+    - npm run build:zip
     supported-platforms: []
 resources:
 - name: sap-ui5-odata-app-destination-service
@@ -89,6 +101,16 @@ resources:
     service: html5-apps-repo
     service-name: sap-ui5-odata-app-html5-srv
     service-plan: app-host
+- name: sap-ui5-odata-app-html5-repo-runtime
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service: html5-apps-repo
+    service-plan: app-runtime
+- name: sap-ui5-odata-app-connectivity
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service: connectivity
+    service-plan: lite
 parameters:
   deploy_mode: html5-repo
   enable-parallel-deployments: true

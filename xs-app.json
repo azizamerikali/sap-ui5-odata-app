@@ -24,7 +24,7 @@
         {
             "source": "^/(.*)$",
             "localDir": "webapp",
-            "authenticationType": "xsuaa"
+            "authenticationType": "none"
         }
     ]
 }
