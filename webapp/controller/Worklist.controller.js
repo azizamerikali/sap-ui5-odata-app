@@ -223,14 +223,28 @@ sap.ui.define([
         },
 
         onLogout: function () {
-            // Destroy the OData model to clear credentials
-            var oModel = this.getOwnerComponent().getModel();
-            if (oModel) {
-                oModel.destroy();
-                this.getOwnerComponent().setModel(null);
-            }
-            // Navigate back to login
-            this.getRouter().navTo("login");
+            var that = this;
+
+            // First, call SAP logoff endpoint to terminate backend session
+            fetch("/sap/public/bc/icf/logoff", {
+                method: "GET",
+                credentials: "include"
+            }).then(function () {
+                // SAP session terminated successfully
+                console.log("SAP session logged off");
+            }).catch(function (error) {
+                // Log error but continue with logout
+                console.warn("SAP logoff failed:", error);
+            }).finally(function () {
+                // Destroy the OData model to clear credentials
+                var oModel = that.getOwnerComponent().getModel();
+                if (oModel) {
+                    oModel.destroy();
+                    that.getOwnerComponent().setModel(null);
+                }
+                // Navigate back to login
+                that.getRouter().navTo("login");
+            });
         }
     });
 });

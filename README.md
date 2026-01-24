@@ -154,6 +154,27 @@ Deploy sonrası verilen URL:
 https://00148a26trial-dev-sap-ui5-odata-app-router.cfapps.us10-001.hana.ondemand.com/sapuidemoodata/index.html
 ```
 
+### SAP Oturumu Sonlandırma (Logoff)
+
+Uygulama çıkış işlemi sırasında SAP backend oturumunu da sonlandırır:
+
+```
+┌────────────────────────────────────────────────────────┐
+│  Çıkış Yap Butonu                                      │
+│         │                                              │
+│         ▼                                              │
+│  fetch("/sap/public/bc/icf/logoff")                    │
+│         │                                              │
+│         ▼                                              │
+│  SAP Backend Session Sonlandırılır                     │
+│         │                                              │
+│         ▼                                              │
+│  OData Model Yok Edilir → Login Sayfasına Yönlendir    │
+└────────────────────────────────────────────────────────┘
+```
+
+**İlgili Dosya:** `webapp/controller/Worklist.controller.js` → `onLogout()` fonksiyonu
+
 ---
 
 ## Proje Yapısı
