@@ -34,10 +34,10 @@ sap.ui.define([
 					var oSettings = JSON.parse(sSyst);
 
 					// Re-calculate proxy URL (similar logic to Login.controller)
-					var sProxyUrl;
+					var sProxyUrl = "/sap/"; // Default relative
 					var sCurrentHost = window.location.host;
 					if (sCurrentHost.includes('localhost') || sCurrentHost.includes('127.0.0.1')) {
-						sProxyUrl = "http://localhost:3000/sap/";
+						sProxyUrl = "/sap/";
 					} else {
 						sProxyUrl = "/api/sap/";
 					}

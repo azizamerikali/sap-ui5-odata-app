@@ -6,7 +6,7 @@
     "scripts": {
         "proxy": "node proxy.js",
         "start": "node node_modules/@sap/approuter/approuter.js",
-        "start-local": "concurrently \"npm run proxy\" \"npx http-server ./webapp -p 8080 --cors\"",
+        "start-local": "node proxy.js",
         "serve": "npx http-server ./webapp -p 8080 --cors -o",
         "build:cf": "ui5 build --clean-dest --dest dist",
         "build:zip": "npm run build:cf && powershell -Command \"Compress-Archive -Path dist\\* -DestinationPath sap-ui5-odata-app.zip -Force\""

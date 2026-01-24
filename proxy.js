@@ -19,6 +19,9 @@ app.use(cors({
 app.use(express.json());
 app.use(express.text({ type: '*/*' }));
 
+// Serve static files from webapp
+app.use(express.static('webapp'));
+
 // Create an HTTPS agent that ignores SSL certificate errors
 const httpsAgent = new https.Agent({
     rejectUnauthorized: false

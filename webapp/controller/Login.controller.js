@@ -11,11 +11,12 @@ sap.ui.define([
         onInit: function () {
             // Detect if running on Vercel or locally
             var sCurrentHost = window.location.host;
-            var sProxyUrl;
+            var sProxyUrl = "/sap/"; // Always relative now, thanks to unified server or Vercel routing
 
+            // Legacy check - if we were running separate ports
             if (sCurrentHost.includes('localhost') || sCurrentHost.includes('127.0.0.1')) {
-                // Local development - use local proxy
-                sProxyUrl = "http://localhost:3000/sap/";
+                // Now accessing via localhost:3000 (unified), so /sap/ goes to same host
+                sProxyUrl = "/sap/";
             } else {
                 // Vercel deployment - use serverless function
                 sProxyUrl = "/api/sap/";
