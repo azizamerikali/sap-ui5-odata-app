@@ -39,9 +39,11 @@ app.all('/sap/*', async (req, res) => {
 
         // Get authorization header from request
         const authHeader = req.headers.authorization;
+        const cookieHeader = req.headers.cookie;
 
-        if (!authHeader) {
-            console.log('[PROXY] No authorization header provided');
+        // Allow if Auth header OR Cookie header is present
+        if (!authHeader && !cookieHeader) {
+            console.log('[PROXY] No authorization header or cookie provided');
             return res.status(401).json({ error: 'Authorization header required' });
         }
 
